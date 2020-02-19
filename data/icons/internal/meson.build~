@@ -1,0 +1,4 @@
+install_data (
+    'input-gaming-new.svg',
+    install_dir: join_paths (get_option ('datadir'), 'icons', 'hicolor', '64x64', 'actions')
+)

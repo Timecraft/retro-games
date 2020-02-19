@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/com/github/timecraft/retro">
+        <file alias="Application.css">Application.css</file>
+        <file alias="input-gaming-new.svg">icons/internal/input-gaming-new.svg</file>
+        
+    </gresource>
+</gresources>
