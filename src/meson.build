@@ -16,6 +16,7 @@ executable (
     join_paths ('core/install_core.vala'),
     join_paths ('core/install_game.vala'),
     join_paths ('core/core.vala'),
+    join_paths ('core/view.vala'),
     
     
     # Widget files
