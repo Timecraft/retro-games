@@ -3,6 +3,8 @@ public class Timecraft.RetroGame.InstallCore : Gtk.Button {
     private Gtk.Window core_info;
 
     private InstallCoreOptions install_core_options;
+    
+    private MainWindow main_window;
 
     // Allow for error toasts
     private Gtk.Overlay toast_overlay;
@@ -14,21 +16,23 @@ public class Timecraft.RetroGame.InstallCore : Gtk.Button {
 
     // Console exists
     private Gtk.ComboBox console_selector;
-    private System[] systems_list = Application.instance.systems;
+    private System[] systems_list;
 
-    public static InstallCore instance;
+    
 
 
-    public InstallCore () {
-        install_core_options = new InstallCoreOptions ();
+    public InstallCore (MainWindow main_window) {
+        this.main_window = main_window;
+        install_core_options = new InstallCoreOptions (this);
+        systems_list = main_window.retro_application.systems;
         show_window ();
-        instance = this;
+        
     }
 
 
 
     public void show_window () {
-        var core_chooser = new Gtk.FileChooserDialog ("Install Core", MainWindow.instance, Gtk.FileChooserAction.OPEN, "Cancel", Gtk.ResponseType.CANCEL, "Open", Gtk.ResponseType.ACCEPT);
+        var core_chooser = new Gtk.FileChooserDialog ("Install Core", main_window, Gtk.FileChooserAction.OPEN, "Cancel", Gtk.ResponseType.CANCEL, "Open", Gtk.ResponseType.ACCEPT);
 
         var core_filter = new Gtk.FileFilter ();
         core_filter.add_mime_type ("application/x-sharedlib");
@@ -178,7 +182,7 @@ public class Timecraft.RetroGame.InstallCore : Gtk.Button {
 
                 //SystemGrid.instance.update_systems ();
 
-                MainWindow.instance.update_system_grid ();
+                main_window.update_system_grid ();
                 core_info.destroy ();
             }
             // There wasn't anything in the core console text box :(
@@ -260,7 +264,7 @@ public class Timecraft.RetroGame.InstallCore : Gtk.Button {
 
             //SystemGrid.instance.update_systems ();
 
-            MainWindow.instance.update_system_grid ();
+            main_window.update_system_grid ();
 
         });
 

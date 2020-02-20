@@ -1,20 +1,20 @@
 public class Timecraft.RetroGame.InstallButton : Gtk.Button {
     
     public Gtk.Popover popover;
-    public static InstallButton instance;
     
-    public InstallButton () {
+    
+    public InstallButton (MainWindow main_window) {
         Object (
             image: new Gtk.Image.from_icon_name ("text-x-install", Gtk.IconSize.LARGE_TOOLBAR)
         );
         
         clicked.connect ( () => {
             var grid = new Gtk.Grid ();
-            if (MainWindow.instance.current_grid == "system_grid") {
-                grid.attach (new InstallCoreButton (), 0, 0, 1, 1);
+            if (main_window.current_grid == "system_grid") {
+                grid.attach (new InstallCoreButton (main_window), 0, 0, 1, 1);
             }
-            else if (MainWindow.instance.current_grid == "game_grid") {
-                grid.attach (new InstallGameButton (), 0, 1, 1, 1);
+            else if (main_window.current_grid == "game_grid") {
+                grid.attach (new InstallGameButton (main_window), 0, 1, 1, 1);
             }
             
             
@@ -23,7 +23,7 @@ public class Timecraft.RetroGame.InstallButton : Gtk.Button {
             popover.add (grid);
             popover.show_all ();
         });
-        instance = this;
+        
     }
     
 }

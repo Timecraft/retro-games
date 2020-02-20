@@ -1,5 +1,5 @@
 public class Timecraft.RetroGame.InstallCoreButton : Gtk.Button {
-    public InstallCoreButton () {
+    public InstallCoreButton (MainWindow main_window) {
         Gtk.Image input_gaming_new = new Gtk.Image.from_icon_name ("com.github.timecraft.retro", Gtk.IconSize.LARGE_TOOLBAR);
         input_gaming_new.pixel_size = 24;
         
@@ -15,8 +15,8 @@ public class Timecraft.RetroGame.InstallCoreButton : Gtk.Button {
             margin_bottom: 20
         );
         clicked.connect ( () => {
-            new InstallCore ();
-            InstallButton.instance.popover.hide ();
+            new InstallCore (main_window);
+            main_window.headerbar.hide_install_popover ();
         });
     }
 }

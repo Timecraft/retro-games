@@ -5,16 +5,16 @@ public class Timecraft.RetroGame.View : GLib.Object {
     public Retro.CoreView game_view;
     public Retro.MainLoop main_loop;
 
-    public static View? instance;
+    
 
-    public View (Retro.Core core) {
+    public View (Retro.Core core, MainWindow main_window) {
         game_view = new Retro.CoreView ();
 
         game_view.set_core (core);
 
 
 
-        MainWindow.instance.add (game_view);
+        
 
         var key_joypad_mapping = new Retro.KeyJoypadMapping ();
         var key_map = new GLib.HashTable<Retro.JoypadId, uint16> (null, null);
@@ -74,10 +74,10 @@ public class Timecraft.RetroGame.View : GLib.Object {
         main_loop = new Retro.MainLoop (core);
         main_loop.start ();
 
-        Headerbar.instance.remove_back_button ();
+        main_window.headerbar.remove_back_button ();
 
-        MainWindow.instance.show_all ();
+        main_window.show_all ();
 
-        instance = this;
+        
     }
 }

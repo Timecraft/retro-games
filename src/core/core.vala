@@ -2,7 +2,7 @@ public class Timecraft.RetroGame.RetroCore : GLib.Object {
     public string path;
     public string name;
     
-    public static RetroCore instance;
+    
     
     public RetroCore (string path) {
         this.path = path;
@@ -10,7 +10,7 @@ public class Timecraft.RetroGame.RetroCore : GLib.Object {
         
         
         
-        instance = this;
+        
     }
     
     public string to_string () {

@@ -41,7 +41,7 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
     }
     
     protected override void activate () {
-    
+        
         default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/timecraft/retro");
         
@@ -100,12 +100,13 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
         
         
         
-        MainWindow.instance.load_game_view (emulator_core);
+        main_window.load_game_view (emulator_core);
     }
     
     
     
     public static int main (string[] args) {
+        
         var app = new Application ();
         return app.run (args);
     }

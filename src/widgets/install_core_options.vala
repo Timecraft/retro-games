@@ -1,5 +1,5 @@
 public class Timecraft.RetroGame.InstallCoreOptions : Granite.Widgets.Welcome {
-    public InstallCoreOptions () {
+    public InstallCoreOptions (InstallCore parent) {
         Object (
             title: "Install Core",
             subtitle: ""
@@ -22,11 +22,11 @@ public class Timecraft.RetroGame.InstallCoreOptions : Granite.Widgets.Welcome {
             switch (index) {
                 case 0:
                     
-                    InstallCore.instance.new_console ();
+                    parent.new_console ();
                     break;
                 
                 case 1:
-                    InstallCore.instance.existing_console ();
+                    parent.existing_console ();
                     break;
                     
             }

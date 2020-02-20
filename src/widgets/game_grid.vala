@@ -20,12 +20,15 @@ public class Timecraft.RetroGame.GameGrid : Gtk.EventBox {
     private RetroCore[] available_cores;
     
     private Gtk.ComboBox core_selector;
+    
+    private MainWindow main_window;
 
     //public signal void activated (int index);
 
     //protected new GLib.List<Gtk.Button> children = new GLib.List<Gtk.Button> ();
 
-    public GameGrid (System system) {
+    public GameGrid (System system, MainWindow main_window) {
+        this.main_window = main_window;
         this.system = system;
         games = new Gtk.Grid ();
         this.system.get_games ();
@@ -139,7 +142,7 @@ public class Timecraft.RetroGame.GameGrid : Gtk.EventBox {
             games.attach (welcome, 0, 0, 1, 1);
             
             welcome.activated.connect ( (index) => {
-                var install_game = new InstallGame ();
+                var install_game = new InstallGame (main_window);
                 install_game.clicked ();
             });
         }
@@ -167,6 +170,6 @@ public class Timecraft.RetroGame.GameGrid : Gtk.EventBox {
         last_selected_button = new_game;
         new_game.icon = new Gtk.Image.from_icon_name ("media-playback-start", Gtk.IconSize.DIALOG);
         
-        MainWindow.instance.show_all ();
+        main_window.show_all ();
     }
 }

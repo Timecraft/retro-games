@@ -7,14 +7,19 @@ public class Timecraft.RetroGame.InstallGame : Gtk.Button {
     private GLib.File game_file;
     private GLib.File game_file_destination;
     
-    private System system = Application.instance.selected_system;
+    private MainWindow main_window;
     
-    public InstallGame () {
+    private System system;
+    
+    public InstallGame (MainWindow main_window) {
+        this.main_window = main_window;
+        system = main_window.retro_application.selected_system;
         show_window ();
+        
     }
     
     public void show_window () {
-        var game_chooser = new Gtk.FileChooserDialog ("Install game", MainWindow.instance, Gtk.FileChooserAction.OPEN, "Cancel", Gtk.ResponseType.CANCEL, "Open", Gtk.ResponseType.ACCEPT);
+        var game_chooser = new Gtk.FileChooserDialog ("Install game", main_window, Gtk.FileChooserAction.OPEN, "Cancel", Gtk.ResponseType.CANCEL, "Open", Gtk.ResponseType.ACCEPT);
 
        
        
@@ -55,7 +60,7 @@ public class Timecraft.RetroGame.InstallGame : Gtk.Button {
                     // Update game_grid
                     
                     
-                    MainWindow.instance.update_game_grid ();
+                    main_window.update_game_grid ();
                     
                     game_chooser.destroy ();
 
@@ -63,7 +68,7 @@ public class Timecraft.RetroGame.InstallGame : Gtk.Button {
            }
        
         
-        InstallButton.instance.popover.hide ();
+        main_window.headerbar.hide_install_popover ();
     });
     
     }

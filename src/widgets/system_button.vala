@@ -6,6 +6,8 @@ public class Timecraft.RetroGame.SystemButton : Gtk.Button {
     Gtk.Label button_title;
     Gtk.Grid button_grid;
     
+    public MainWindow main_window {get; set;}
+    
     public string title {
         get { return button_title.get_text (); }
         set { button_title.set_text (value); }
@@ -27,15 +29,19 @@ public class Timecraft.RetroGame.SystemButton : Gtk.Button {
         }
     }
     
-    public SystemButton (System system) {
+    public SystemButton (System system, MainWindow main_window) {
+        message ((main_window == null).to_string ());
+        
         Object (
             icon: system.image,
             title: system.name,
             system: system
+            
         );
+        this.main_window = main_window;
          clicked.connect (() => {
              
-             MainWindow.instance.make_game_grid (system);
+             this.main_window.make_game_grid (system);
              
              
              Application.instance.selected_system = this.system;
@@ -49,7 +55,7 @@ public class Timecraft.RetroGame.SystemButton : Gtk.Button {
             system: null
         );
         clicked.connect (() => {
-            new InstallCore ();
+            new InstallCore (main_window);
         });
     }
     construct {

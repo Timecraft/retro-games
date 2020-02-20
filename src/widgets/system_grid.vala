@@ -7,9 +7,11 @@ public class Timecraft.RetroGame.SystemGrid : Gtk.EventBox {
 
     private Gtk.Grid systems;
     
-    public static SystemGrid? instance;
+    
     
     private Granite.Widgets.Welcome welcome;
+    
+    private MainWindow main_window;
     
     
 
@@ -17,32 +19,29 @@ public class Timecraft.RetroGame.SystemGrid : Gtk.EventBox {
 
     //protected new GLib.List<Gtk.Button> children = new GLib.List<Gtk.Button> ();
 
-    public SystemGrid () {
+    public SystemGrid (MainWindow main_window) {
         
-        add_systems ();
+        add_systems (main_window);
         
         add (systems);
         
-        instance = this;
+        
+        this.main_window = main_window;
+        
         
     }
     
-    public void add_systems () {
-        if (instance != null) {
-            instance.destroy ();
-        }
-        if (systems != null) {
-            systems.destroy ();
-        }
+    public void add_systems (MainWindow main_window) {
+        
         
         systems = new Gtk.Grid ();
-    
+        message ((main_window == null).to_string ());
         
         if (Application.instance.systems_found) {
         
             foreach (System current_system in Application.instance.systems) {
                 
-                var button = new SystemButton (current_system);
+                var button = new SystemButton (current_system, main_window);
                     if (current_cell_x > cells_width) {
                     current_cell_y ++;
                     current_cell_x = -1;
@@ -78,7 +77,7 @@ public class Timecraft.RetroGame.SystemGrid : Gtk.EventBox {
             systems.attach (welcome, 0,0,1,1);
             
             welcome.activated.connect (() => {
-                new InstallCore ();
+                new InstallCore (main_window);
                 
             });
             
@@ -90,8 +89,8 @@ public class Timecraft.RetroGame.SystemGrid : Gtk.EventBox {
         remove (systems);
         systems.destroy ();
         systems = new Gtk.Grid ();
-        add_systems ();
-        MainWindow.instance.show_all ();
+        add_systems (main_window);
+        main_window.show_all ();
     }
 
 }

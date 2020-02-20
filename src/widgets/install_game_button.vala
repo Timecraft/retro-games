@@ -1,6 +1,6 @@
 public class Timecraft.RetroGame.InstallGameButton : Gtk.Button {
     
-    public InstallGameButton () {
+    public InstallGameButton (MainWindow main_window) {
         Object (
             image: new Gtk.Image.from_icon_name ("applications-games", Gtk.IconSize.LARGE_TOOLBAR),
             always_show_image: true,
@@ -12,8 +12,8 @@ public class Timecraft.RetroGame.InstallGameButton : Gtk.Button {
             margin_bottom: 20
         );
         clicked.connect ( () => {
-            new InstallGame ();
-            InstallButton.instance.popover.hide ();
+            new InstallGame (main_window);
+            main_window.headerbar.hide_install_popover ();
             
         });
     }
