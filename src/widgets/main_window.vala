@@ -94,18 +94,7 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         add (game_view);
         message (core.get_filename ());
         
-        try {
-            
-            core.boot ();
-            
-            core.iteration ();
-            core.reset ();
-            
-            
-        }
-        catch (Error e) {
-            error ("%s", e.message);
-        }
+
         
         game_view.set_key_joypad_mapping (null);
         
@@ -129,7 +118,7 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         
         game_view.set_key_joypad_mapping (key_joypad_mapping);
         
-        //core.set_default_controller (Retro.ControllerType.KEYBOARD, null);
+        core.set_default_controller (Retro.ControllerType.KEYBOARD, null);
         
         game_view.set_as_default_controller (core);
         
@@ -144,10 +133,19 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         
         
         
+        Retro.MainLoop main_loop = new Retro.MainLoop (core);
         
-        
-        
+                try {
+                    
+                    core.boot ();
+                    
+                }
+                catch (Error e) {
+                    error ("%s", e.message);
+                }
+        main_loop.start ();
         core.run ();
+        
         Headerbar.instance.remove_back_button ();
         
         show_all ();
