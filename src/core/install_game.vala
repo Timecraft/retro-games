@@ -44,7 +44,7 @@ public class Timecraft.RetroGame.InstallGame : Gtk.Button {
                     if (game_file.query_exists ()) {
                         game_file_destination = GLib.File.new_for_path (system.system_path + game_name_with_extension);
                         try {
-                            game_file.move (game_file_destination, GLib.FileCopyFlags.OVERWRITE);
+                            game_file.copy (game_file_destination, GLib.FileCopyFlags.OVERWRITE);
                         }
                         catch (Error e) {
                             error (e.message);
