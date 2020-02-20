@@ -41,7 +41,7 @@ public class Timecraft.RetroGame.SystemGrid : Gtk.EventBox {
         if (Application.instance.systems_found) {
         
             foreach (System current_system in Application.instance.systems) {
-                message (current_system.path);
+                
                 var button = new SystemButton (current_system);
                     if (current_cell_x > cells_width) {
                     current_cell_y ++;

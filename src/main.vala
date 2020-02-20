@@ -95,10 +95,6 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
     }
     
     public void prepare_core () {
-        
-        message (this.selected_game.path);
-        message (this.selected_core.path);
-        message ("/home/nick/.local/share/com.github.timecraft.retro/GameBoy Advance/cores/vbam_libretro.so");
         emulator_core = new Retro.Core (this.selected_core.path);
         emulator_core.set_medias ({selected_game.uri});
         

@@ -34,12 +34,8 @@ public class Timecraft.RetroGame.GameButton : Gtk.ToggleButton {
             game: game
         );
          clicked.connect (() => {
-             message (game.path);
-             
-             // TODO: Set up system startup
              Application.instance.selected_game = game;
              GameGrid.instance.game_changed (this);
-             //this.active = true;
          });
     }
 
@@ -53,8 +49,6 @@ public class Timecraft.RetroGame.GameButton : Gtk.ToggleButton {
         
         
         clicked.connect (() => {
-            message (game.path);
-            // TODO: Set up game startup
         });
         
     }

@@ -77,10 +77,7 @@ public class Timecraft.RetroGame.System : GLib.Object {
         catch (Error e) {
             error ("%s", e.message);
         }
-        if (found_libretro_core) {
-            message ("System %s has cores available",this.name);
-        }
-        else {
+        if (!found_libretro_core) {
             critical ("Could not find a libretro core for %s system", this.name);
         }
         cores = _cores;
@@ -102,7 +99,7 @@ public class Timecraft.RetroGame.System : GLib.Object {
                 else if (   !current_file_info.get_display_name ().contains ("libretro") && 
                             !current_file_info.get_display_name ().contains (".sav") && 
                             !current_file_info.get_display_name ().contains ("cores")) {
-                            message (file.get_path () + "/" + current_file_info.get_display_name ());
+                            
                     game_files += GLib.File.new_for_path (file.get_path () + "/" + current_file_info.get_display_name ());
                     found_games = true;
                 }

@@ -92,7 +92,6 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         game_grid.destroy ();
         
         add (game_view);
-        message (core.get_filename ());
         
 
         
@@ -143,8 +142,11 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
                 catch (Error e) {
                     error ("%s", e.message);
                 }
+        
         main_loop.start ();
         core.run ();
+        
+        message (core.get_frames_per_second ().to_string ());
         
         Headerbar.instance.remove_back_button ();
         

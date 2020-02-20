@@ -34,9 +34,9 @@ public class Timecraft.RetroGame.SystemButton : Gtk.Button {
             system: system
         );
          clicked.connect (() => {
-             message (system.path);
+             
              MainWindow.instance.make_game_grid (system);
-             // TODO: Set up system startup
+             
              
              Application.instance.selected_system = this.system;
          });
