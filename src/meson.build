@@ -39,7 +39,7 @@ executable (
         dependency ('granite'),
         dependency ('gtk+-3.0'),
         dependency ('glib-2.0'),
-        dependency ('retro-gtk-1'),
+        dependency ('retro-gtk-0.14'),
         dependency ('gmodule-2.0'),
         dependency ('manette-0.2'),
         cc.find_library('m'),
