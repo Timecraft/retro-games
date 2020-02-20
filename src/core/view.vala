@@ -24,8 +24,8 @@ public class Timecraft.RetroGame.View : GLib.Object {
     // Agree it sucks and we should do something about it
     key_map.insert (Retro.JoypadId.A,       45 + 8);
     key_map.insert (Retro.JoypadId.B,       44 + 8);
-    key_map.insert (Retro.JoypadId.Y,       30 + 8);
-    key_map.insert (Retro.JoypadId.X,       31 + 8);
+    key_map.insert (Retro.JoypadId.L,       30 + 8);
+    key_map.insert (Retro.JoypadId.R,       31 + 8);
     key_map.insert (Retro.JoypadId.UP,      103 + 8);
     key_map.insert (Retro.JoypadId.DOWN,    108 + 8);
     key_map.insert (Retro.JoypadId.LEFT,    105 + 8);
