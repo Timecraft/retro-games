@@ -36,6 +36,10 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         instance = this;
     }
     
+    ~MainWindow () {
+        View.instance.main_loop.stop ();
+    }
+    
     public void make_game_grid (System system) {
         Headerbar.instance.add_back_button ();
         remove (system_grid);

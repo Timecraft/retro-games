@@ -1,6 +1,9 @@
 public class Timecraft.RetroGame.View : GLib.Object {
 
     public Retro.CoreView game_view;
+    public Retro.MainLoop main_loop;
+
+    public static View? instance;
 
     public View (Retro.Core core) {
         game_view = new Retro.CoreView ();
@@ -42,7 +45,7 @@ public class Timecraft.RetroGame.View : GLib.Object {
         
         //core.set_default_controller (Retro.ControllerType.JOYPAD, null);
 
-        Retro.MainLoop main_loop = new Retro.MainLoop (core);
+        main_loop = new Retro.MainLoop (core);
         main_loop.start ();
         try {
             core.boot ();
@@ -55,5 +58,7 @@ public class Timecraft.RetroGame.View : GLib.Object {
         Headerbar.instance.remove_back_button ();
         
         MainWindow.instance.show_all ();
+        
+        instance = this;
     }
 }
