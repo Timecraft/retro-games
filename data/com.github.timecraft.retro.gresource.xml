@@ -4,6 +4,8 @@
     <file alias="Application.css">Application.css</file>
     <file alias="input-gaming-new.svg">icons/internal/input-gaming-new.svg</file>
     
+    <file alias="controller-outline.svg">icons/internal/controller-buttons/controller-outline.svg</file>
+    
     <!-- Controller buttons -->
       <!-- DPad -->
           <file alias="controller-button-dpad-down.svg">icons/internal/controller-buttons/controller-button-dpad-down.svg</file>

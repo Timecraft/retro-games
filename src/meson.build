@@ -4,6 +4,8 @@
 #   Dependencies
 #   Install
 
+extra_dir = join_paths (meson.source_root (), 'src/core/vapis')
+
 executable (
     meson.project_name (),
     
@@ -17,7 +19,7 @@ executable (
     join_paths ('core/install_game.vala'),
     join_paths ('core/core.vala'),
     join_paths ('core/view.vala'),
-    join_paths ('core/retro_input.vala'),
+    join_paths ('core/retro_gamepad.vala'),
     
     
     # Widget files
@@ -32,6 +34,8 @@ executable (
     join_paths ('widgets/install_core_options.vala'),
     join_paths ('widgets/back_button.vala'),
     join_paths ('widgets/install_game_button.vala'),
+    join_paths ('widgets/control_button.vala'),
+    join_paths ('widgets/control_window.vala'),
     
     
     asresources,
@@ -45,7 +49,8 @@ executable (
         dependency ('gmodule-2.0'),
         dependency ('manette-0.2'),
         cc.find_library('m'),
-        valac.find_library ('event-codes', dirs: join_paths (meson.source_root (), 'src/core/vapis'))
+        valac.find_library ('event-codes', dirs: extra_dir)
     ],
+    c_args: '-I' + extra_dir,
     install: true
 )

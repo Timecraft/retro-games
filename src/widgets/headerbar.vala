@@ -3,6 +3,8 @@ public class Timecraft.RetroGame.Headerbar : Gtk.HeaderBar {
     private InstallButton install_button;
     private BackButton back_button;
     
+    private ControlButton control_button;
+    
     public MainWindow main_window {get; construct;}
     
     public Headerbar (MainWindow main_window) {
@@ -14,6 +16,10 @@ public class Timecraft.RetroGame.Headerbar : Gtk.HeaderBar {
         install_button = new InstallButton (main_window);
         
         pack_end (install_button);
+        
+        control_button = new ControlButton (main_window);
+        
+        pack_start (control_button);
         
     }
     
