@@ -14,7 +14,7 @@ public class Timecraft.RetroGame.ControlButton : Gtk.Button {
         );
         
         clicked.connect ( () => {
-            new ControlWindow ();
+            new ControlWindow (main_window);
         });
     }
 }

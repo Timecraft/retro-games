@@ -18,9 +18,14 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     
     private Gtk.Label device_name;
     
+    private MainWindow main_window;
+    
+    
+    private bool button_not_pressed = true;
+    
     private int current_button = 0;
     
-    private int total_buttons = 17;
+    private int total_buttons = 16;
     
     private string[] controller_button_icons =      {   
                                                         "controller-button-primary",        // A
@@ -59,11 +64,21 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                         Retro.JoypadId.R3,
                                                         Retro.JoypadId.START
                                                     };
+                                                    
     
-    public ControlWindow () {
+    
+    private ulong handler_id; // For disconnecting fro signals
+    private ulong handler_id_2;
+    
+    public ControlWindow (MainWindow main_window) {
         Object (
             title: "Set up controls"
         );
+        
+        this.main_window = main_window;
+        
+        
+        
         device_name = new Gtk.Label ("");
         monitor = new Manette.Monitor ();
         monitor_iter = monitor.iterate ();
@@ -100,23 +115,45 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         
         control_setup.clicked.connect ( () => {
             controller_image.icon_name = controller_button_icons [0];
-        });
-        
-        bool worked = monitor_iter.next (out device);
-        if (worked) {
-            message (device.get_name ());
-            device_name.label = device.get_name ();
             
-        }
-        else {
-            message ("No device connected?");
-            device_name.label = "No device connected...";
-            control_setup.set_sensitive (false);
-        }
-        
-        device.button_press_event.connect ( (device_event) => {
-            set_button (device_event);
+            bool worked = monitor_iter.next (out device);
+            if (worked) {
+                message (device.get_name ());
+                device_name.label = device.get_name ();
+                
+                handler_id = device.button_press_event.connect ( (device_event) => {
+                    if (button_not_pressed) {
+                        set_button (device_event, null);
+                        button_not_pressed = false;
+                    }
+                });
+                
+                handler_id_2 = device.button_release_event.connect ( () => {
+                    button_not_pressed = true;
+                });
+            }
+            else {
+                message ("No device connected? Setting keyboard.");
+                device_name.label = "Keyboard";
+                
+                handler_id = key_press_event.connect ( (key_event) => {
+                    if (button_not_pressed) {
+                        set_button (null, key_event.hardware_keycode);
+                    }
+                    button_not_pressed = false;
+                    return true;
+                });
+                
+                handler_id_2 = key_release_event.connect ( () => {
+                    button_not_pressed = true;
+                    return false;
+                });
+            }
         });
+        
+        
+        
+        
         
         
         add (window_grid);
@@ -124,25 +161,86 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         show_all ();
     }
     
+    ~ControlWindow () {
+        if (key_joypad_mapping != null) {
+        uint16 current_key;
+        var xml_file = GLib.Path.build_filename (Application.instance.data_dir + "/controls.xml");
+        Xml.Doc* doc = new Xml.Doc ("1.0");
+        Xml.Node* root_node = new Xml.Node (null, "controls");
+        doc->set_root_element (root_node);
+         
+            foreach (Retro.JoypadId current_id in controller_buttons) {
+                Xml.Node* child = new Xml.Node (null, "control");
+                
+                current_key = key_joypad_mapping.get_button_key (current_id);
+                child->new_prop ("retro", current_id.to_button_code ().to_string ());
+                child->new_prop ("gamepad", current_key.to_string ());
+                
+                root_node->add_child (child);
+            }
+            
+        doc->save_format_file (xml_file, 1);
+        delete doc;
+        }
+    }
+    
+    
+    public Retro.KeyJoypadMapping? get_key_joypad_mapping () {
+        if (key_joypad_mapping == null) {
+            critical ("There is no KeyJoypadMapping");
+            return null;
+        }
+        else {
+            return key_joypad_mapping;
+        }
+    }
+    
+    
     private void refresh_controller (Manette.Device device) {
         message (device.get_name ());
         device_name.label = device.get_name ();
-        control_setup.set_sensitive (true);
+        handler_id = device.button_press_event.connect ( (device_event) => {
+            set_button (device_event, null);
+        });
+        
     }
     
-    private void set_button (Manette.Event device_event) {
-        
+    private void set_button (Manette.Event? device_event, uint16? key_val) {
+        if (device_event != null) {
         key_joypad_mapping.set_button_key (controller_buttons [current_button], device_event.get_hardware_code ());
         current_button ++;
-        if (current_button > total_buttons) {
+        if (current_button >= total_buttons) {
             device = null;
             controller_image.icon_name = "controller-outline";
+            device.disconnect (handler_id);
+            main_window.key_joypad_mapping = this.key_joypad_mapping;
+            current_button = 0;
+            message ((this.key_joypad_mapping == null).to_string ());
             return;
         }
         controller_image.icon_name = controller_button_icons [current_button];
+        }
         
+        else if (key_val != null) {
+            key_joypad_mapping.set_button_key (controller_buttons [current_button], key_val);
+            current_button ++;
+            if (current_button >= total_buttons) {
+                controller_image.icon_name = "controller-outline";
+                disconnect (handler_id);
+                main_window.key_joypad_mapping = this.key_joypad_mapping;
+                current_button = 0;
+                message ((this.key_joypad_mapping == null).to_string ());
+                return;
+            }
+            controller_image.icon_name = controller_button_icons [current_button];
+        }
         
-        
+        if (current_button >= total_buttons) {
+            
+            
+        }
     }
+    
+    
     
 }
