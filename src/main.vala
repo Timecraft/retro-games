@@ -78,9 +78,10 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
                 if (current_file_info == null) {
                     break;
                 }
-                
-                console_dirs += GLib.File.new_for_path (games_dir.get_path () + "/" + current_file_info.get_display_name ());
-                systems_found = true;
+                if (!current_file_info.get_display_name ().contains ("controls")) {
+                    console_dirs += GLib.File.new_for_path (games_dir.get_path () + "/" + current_file_info.get_display_name ());
+                    systems_found = true;
+                }
             }
         }
         catch (Error e) {

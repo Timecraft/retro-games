@@ -48,6 +48,7 @@ executable (
         dependency ('retro-gtk-0.14'),
         dependency ('gmodule-2.0'),
         dependency ('manette-0.2'),
+        dependency ('libxml-2.0'),
         cc.find_library('m'),
         valac.find_library ('event-codes', dirs: extra_dir)
     ],

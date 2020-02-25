@@ -12,30 +12,13 @@ public class Timecraft.RetroGame.View : GLib.Object {
 
         game_view.set_core (core);
 
-
+        var key_joypad_mapping = main_window.key_joypad_mapping;
 
         
+        if (key_joypad_mapping == null) {
+            critical ("There is no KeyJoypadMapping set up!");
+        }
 
-        var key_joypad_mapping = new Retro.KeyJoypadMapping ();
-        var key_map = new GLib.HashTable<Retro.JoypadId, uint16> (null, null);
-
-        // Keycodes come from input-event-codes.h + 8 because that's what GDK does
-        // Normally you allow user to remap keys, so you get this value from GDK, but not here
-        // Agree it sucks and we should do something about it
-        key_map.insert (Retro.JoypadId.A,       45 + 8);
-        key_map.insert (Retro.JoypadId.B,       44 + 8);
-        key_map.insert (Retro.JoypadId.L,       30 + 8);
-        key_map.insert (Retro.JoypadId.R,       31 + 8);
-        key_map.insert (Retro.JoypadId.UP,      103 + 8);
-        key_map.insert (Retro.JoypadId.DOWN,    108 + 8);
-        key_map.insert (Retro.JoypadId.LEFT,    105 + 8);
-        key_map.insert (Retro.JoypadId.RIGHT,   106 + 8);
-        key_map.insert (Retro.JoypadId.START,   28 + 8);
-        key_map.insert (Retro.JoypadId.SELECT,  54 + 8);
-
-        key_map.foreach ( (joypad, keyboard) => {
-            key_joypad_mapping.set_button_key (joypad, keyboard);
-        });
 
         game_view.set_key_joypad_mapping (key_joypad_mapping);
 

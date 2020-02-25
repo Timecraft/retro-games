@@ -53,10 +53,11 @@ public class Timecraft.RetroGame.System : GLib.Object {
             while (true) {
                 GLib.FileInfo current_file_info;
                 file_enumerator.iterate (out current_file_info, null, null);
+
                 if (current_file_info == null) {
                     break;
                 }
-                if (current_file_info.get_display_name ().contains ("cores")) {
+                if (current_file_info.get_display_name ().contains ("cores") && !current_file_info.get_display_name ().contains ("retrogame")) {
                     var core_enumerator = GLib.File.new_for_path (this.path + "/cores").enumerate_children (GLib.FileAttribute.STANDARD_DISPLAY_NAME, GLib.FileQueryInfoFlags.NONE);
                     while (true) {
                         core_enumerator.iterate (out current_file_info, null, null);
