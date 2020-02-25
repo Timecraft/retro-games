@@ -9,6 +9,8 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
     private bool[] buttons;
     private int16[] axes;
     private uint16 rumble_effect[2];
+    
+    public signal void button_pressed (); 
 
     public RetroGamepad (Manette.Device device) {
         Object (device: device);
@@ -19,6 +21,9 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
         axes = new int16[EventCode.ABS_MAX + 1];
 
         device.button_press_event.connect (on_button_press_event);
+        device.button_press_event.connect ( () => {
+            button_pressed ();
+        });
         device.button_release_event.connect (on_button_release_event);
         device.absolute_axis_event.connect (on_absolute_axis_event);
     }
