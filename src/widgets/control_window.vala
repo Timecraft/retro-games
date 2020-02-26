@@ -20,8 +20,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     
     private MainWindow main_window;
     
-    
-    private bool button_not_pressed = true;
+
     
     private int current_button = 0;
     
@@ -68,7 +67,6 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     
     
     private ulong handler_id; // For disconnecting fro signals
-    private ulong handler_id_2;
     
     public ControlWindow (MainWindow main_window) {
         Object (
@@ -101,7 +99,6 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         
         controller_image.icon_name = "controller-outline";
         
-        //controller_image.get_style_context ().add_class ("controller-button");
         
         control_setup = new Gtk.Button.with_label ("Set up controller");
         
@@ -113,39 +110,29 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         
         window_grid.attach (control_setup, 2, 4, 1, 1);
         
+        
+        // Ready to set up the controller
         control_setup.clicked.connect ( () => {
             controller_image.icon_name = controller_button_icons [0];
             
+            // Check to see if there is a controller connected
             bool worked = monitor_iter.next (out device);
             if (worked) {
                 message (device.get_name ());
                 device_name.label = device.get_name ();
+
                 
-                handler_id = device.button_press_event.connect ( (device_event) => {
-                    if (button_not_pressed) {
-                        set_button (device_event, null);
-                        button_not_pressed = false;
-                    }
-                });
-                
-                handler_id_2 = device.button_release_event.connect ( () => {
-                    button_not_pressed = true;
+                handler_id = device.button_release_event.connect ( (device_event) => {
+                    set_button (device_event, null);
                 });
             }
+            // There is no controller connected
             else {
                 message ("No device connected? Setting keyboard.");
                 device_name.label = "Keyboard";
                 
-                handler_id = key_press_event.connect ( (key_event) => {
-                    if (button_not_pressed) {
-                        set_button (null, key_event.hardware_keycode);
-                    }
-                    button_not_pressed = false;
-                    return true;
-                });
-                
-                handler_id_2 = key_release_event.connect ( () => {
-                    button_not_pressed = true;
+                handler_id = key_release_event.connect ( (key_event) => {
+                    set_button (null, key_event.hardware_keycode);
                     return false;
                 });
             }
@@ -161,6 +148,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         show_all ();
     }
     
+    // Destructor
     ~ControlWindow () {
         if (key_joypad_mapping != null) {
         uint16 current_key;
@@ -229,16 +217,11 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 disconnect (handler_id);
                 main_window.key_joypad_mapping = this.key_joypad_mapping;
                 current_button = 0;
-                message ((this.key_joypad_mapping == null).to_string ());
                 return;
             }
             controller_image.icon_name = controller_button_icons [current_button];
         }
-        
-        if (current_button >= total_buttons) {
-            
-            
-        }
+
     }
     
     
