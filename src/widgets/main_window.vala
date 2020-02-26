@@ -124,13 +124,15 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
 
         add (game_view_instance.game_view);
         game_view_instance.game_view.grab_focus ();
-        core.video_output.connect ( () => {
-            message (core.get_frames_per_second ().to_string ());
-        });
+        
 
         /* Used for creating a log for an issue on retro-gtk's gitlab repo
         bool key_is_pressed = false;
 
+        core.video_output.connect ( () => {
+            message (core.get_frames_per_second ().to_string ());
+        });
+        
         game_view_instance.game_view.key_release_event.connect ( (key) => {
             if (key.keyval == Gdk.Key.Up && key_is_pressed) {
                 message ("Up arrow released");
