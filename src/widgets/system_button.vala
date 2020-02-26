@@ -30,7 +30,6 @@ public class Timecraft.RetroGame.SystemButton : Gtk.Button {
     }
     
     public SystemButton (System system, MainWindow main_window) {
-        message ((main_window == null).to_string ());
         
         Object (
             icon: system.image,

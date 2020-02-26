@@ -32,7 +32,6 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
             width_request: 1200
         );
         gtk_settings.gtk_application_prefer_dark_theme = true;
-        message ((this == null).to_string ());
         system_grid = new SystemGrid (this);
         headerbar = new Headerbar (this);
         set_titlebar (headerbar);

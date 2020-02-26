@@ -60,7 +60,6 @@ public class Timecraft.RetroGame.GameGrid : Gtk.EventBox {
             if (last_core_name == core_name) {
                 
                 index_for_last_core = current_index;
-                message (index_for_last_core.to_string ());
             }
             current_index ++;
             
@@ -111,6 +110,7 @@ public class Timecraft.RetroGame.GameGrid : Gtk.EventBox {
         
         if (system.found_games){
             foreach (Game current_game in system.games) {
+                message ("Creating GameButton for %s", current_game.name);
                 var button = new GameButton (current_game);
                 
                 buttons += button;
