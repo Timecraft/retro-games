@@ -13,6 +13,8 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
     public RetroGame.Application retro_application {get; construct;}
 
     public Retro.KeyJoypadMapping key_joypad_mapping = null;
+    
+    public RetroGamepad gamepad;
 
 
     // Let's all other widgets know which grid is currently active
@@ -118,10 +120,22 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
     }
 
     public void load_game_view (Retro.Core core) {
+        
+        if (gamepad == null) {
+            var monitor = new Manette.Monitor ();
+            var monitor_iter = monitor.iterate ();
+            Manette.Device device;
+            monitor_iter.next (out device);
+            
+            if (device != null) { 
+                gamepad = new RetroGamepad (device);
+            }
+        }
+        
         remove (game_grid);
         game_grid.destroy ();
         game_view_instance = new View (core, this);
-
+        message (this.key_joypad_mapping.get_button_key (Retro.JoypadId.START).to_string ());
         add (game_view_instance.game_view);
         game_view_instance.game_view.grab_focus ();
         

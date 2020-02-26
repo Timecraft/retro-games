@@ -32,9 +32,15 @@ public class Timecraft.RetroGame.View : GLib.Object {
         // at once. For other players assign the actual gamepads. In Games we use keyboard
         // for the last one (e.g. if you have 2 gamepads in a 4-player game, players 1 and 2
         // will use gamepads, player 3 will use keyboard, player 4 will just stand there)
-        core.set_default_controller (Retro.ControllerType.JOYPAD, null);
-        var core_view_joypad = game_view.as_controller (Retro.ControllerType.JOYPAD);
-        core.set_controller (0, core_view_joypad);
+        if (main_window.gamepad == null || true) {
+            core.set_default_controller (Retro.ControllerType.JOYPAD, null);
+            var core_view_joypad = game_view.as_controller (Retro.ControllerType.JOYPAD);
+            core.set_controller (0, core_view_joypad);
+        }
+        else {
+            core.set_default_controller (Retro.ControllerType.JOYPAD, null);
+            core.set_controller (0, main_window.gamepad);
+        }
 
         // You have to have save dir and system dir set to something.
         // Save directory is where the core saves (not all cores use saveram, a lot

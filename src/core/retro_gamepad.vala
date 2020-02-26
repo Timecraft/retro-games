@@ -26,6 +26,7 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
         });
         device.button_release_event.connect (on_button_release_event);
         device.absolute_axis_event.connect (on_absolute_axis_event);
+        device.hat_axis_event.connect (on_hat_axis_event);
     }
 
     public int16 get_input_state (Retro.Input input) {
@@ -125,6 +126,15 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
         if (event.get_absolute (out axis, out value)) {
     	    axes[axis] = (int16) (value * int16.MAX);
     	    
+        }
+    }
+    
+    private void on_hat_axis_event (Manette.Event event) {
+        uint16 axis;
+        int8 value;
+        
+        if (event.get_hat (out axis, out value)) {
+            axes[axis] = (int16) (value * int16.MAX);
         }
     }
     
