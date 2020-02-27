@@ -15,13 +15,13 @@
           
       <!-- ABXY, base SNES controller -->
         <!-- A -->
-          <file alias="controller-button-primary.svg">icons/internal/controller-buttons/controller-button-primary.svg</file>
+          <file alias="controller-button-east.svg">icons/internal/controller-buttons/controller-button-east.svg</file>
         <!-- B -->
-          <file alias="controller-button-secondary.svg">icons/internal/controller-buttons/controller-button-secondary.svg</file>
+          <file alias="controller-button-south.svg">icons/internal/controller-buttons/controller-button-south.svg</file>
         <!-- X -->
-          <file alias="controller-button-tertiary.svg">icons/internal/controller-buttons/controller-button-tertiary.svg</file>
+          <file alias="controller-button-north.svg">icons/internal/controller-buttons/controller-button-north.svg</file>
         <!-- Y -->
-          <file alias="controller-button-quaternary.svg">icons/internal/controller-buttons/controller-button-quaternary.svg</file>
+          <file alias="controller-button-west.svg">icons/internal/controller-buttons/controller-button-west.svg</file>
           
       <!-- Bumpers -->
           <file alias="controller-button-right-bumper.svg">icons/internal/controller-buttons/controller-button-right-bumper.svg</file>

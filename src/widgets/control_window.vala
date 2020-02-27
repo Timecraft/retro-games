@@ -82,11 +82,11 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                             "BTN_MODE"
                                                             };
 
-    private string[] controller_button_icons =      {
-                                                        "controller-button-primary",                            // A
-                                                        "controller-button-secondary",                          // B
-                                                        "controller-button-tertiary",                           // X
-                                                        "controller-button-quaternary",                         // Y
+    private string[] controller_button_icons =      {                                                           // Base GameCube controller
+                                                        "controller-button-east",                               // A
+                                                        "controller-button-south",                              // B
+                                                        "controller-button-north",                              // X
+                                                        "controller-button-west",                               // Y
                                                         "controller-button-dpad-up",                            // DPad Up
                                                         "controller-button-dpad-down",                          // DPad Down
                                                         "controller-button-dpad-left",                          // DPad Left
