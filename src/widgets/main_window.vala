@@ -21,7 +21,6 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
     public string current_grid;
 
     
-    private string gamepad_string;
 
 
 
@@ -71,14 +70,7 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
             if (!(retro_control == null && gamepad_control == null)) {
                 key_joypad_mapping.set_button_key (Retro.JoypadId.from_button_code ((uint16) uint64.parse (retro_control)), (uint16) uint64.parse (gamepad_control));
             }
-            else if (retro_control == null && gamepad_control == null) {
-                var gamepad_string_control = node->get_prop ("gamepad_string");
-                if (gamepad_string_control != null) {
-                    gamepad_string = gamepad_string_control;
-                    message (gamepad_string);
-                }
-                
-            }
+            // Libmanette automatically reloads the controls if the device is a controller.
         }
         delete doc;
     }
@@ -137,7 +129,6 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
             var monitor_iter = monitor.iterate ();
             Manette.Device device;
             monitor_iter.next (out device);
-            device.save_user_mapping (gamepad_string);
             if (device != null) {
                 gamepad = new RetroGamepad (device);
             }

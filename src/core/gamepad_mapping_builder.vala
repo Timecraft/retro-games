@@ -51,6 +51,8 @@ private class Timecraft.RetroGame.GamepadMappingBuilder : Object {
 		bool negative_mapped;
 	}
 
+	uint16 please_shush_compiler; // Make the compiler be quiet ;-;
+
 	private GamepadInputMapping[] mappings;
 	private GamepadDPad[] dpads;
 	private HashTable<string, GamepadAxisMapping?> axes;
@@ -59,6 +61,7 @@ private class Timecraft.RetroGame.GamepadMappingBuilder : Object {
 		mappings = new GamepadInputMapping[]{};
 		dpads = new GamepadDPad[]{};
 		axes = new HashTable<string, GamepadAxisMapping?> (str_hash, str_equal);
+		please_shush_compiler = INPUT_SOURCES [0].input.type;
 	}
 
 	public string build_sdl_string () {

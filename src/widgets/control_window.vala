@@ -26,12 +26,12 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
     private int current_button = 0;
 
-    private int total_buttons = 16;
+    private int total_buttons = 21;
 
 
     private const GamepadInput[] STANDARD_GAMEPAD_INPUTS = {
-    		                                                { EventCode.EV_KEY, EventCode.BTN_A },              // A
-                                                    		{ EventCode.EV_KEY, EventCode.BTN_B },              // B
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_B },              // A
+    		                                                { EventCode.EV_KEY, EventCode.BTN_A },              // B
                                                     		{ EventCode.EV_KEY, EventCode.BTN_X },              // X
                                                     		{ EventCode.EV_KEY, EventCode.BTN_Y },              // Y
                                                     		{ EventCode.EV_KEY, EventCode.BTN_DPAD_UP },        // Dpad Up
@@ -47,15 +47,18 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                     		{ EventCode.EV_KEY, EventCode.BTN_THUMBR },         // Right Stick
                                                     		{ EventCode.EV_KEY, EventCode.BTN_START },          // Start
 
-                                                    		{ EventCode.EV_KEY, EventCode.BTN_MODE },           // ??
+                                                    		
 
-                                                    		{ EventCode.EV_ABS, EventCode.ABS_X },              // Left Analog Stick X?
-                                                    		{ EventCode.EV_ABS, EventCode.ABS_Y },              // Left Analog Stick Y?
-                                                    		{ EventCode.EV_ABS, EventCode.ABS_RX },             // Right Analog Stick X?
-                                                    		{ EventCode.EV_ABS, EventCode.ABS_RY },             // Right Analog Stick Y?
+                                                    		{ EventCode.EV_ABS, EventCode.ABS_X },              // Left Analog Stick X
+                                                    		{ EventCode.EV_ABS, EventCode.ABS_Y },              // Left Analog Stick Y
+                                                    		{ EventCode.EV_ABS, EventCode.ABS_RX },             // Right Analog Stick X
+                                                    		{ EventCode.EV_ABS, EventCode.ABS_RY },             // Right Analog Stick Y
+                                                    		
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_MODE },           // Home
     	};
 
-    private string[] standard_gamepad_inputs_as_string =    {
+
+    private string[] standard_gamepad_inputs_as_string =   {
                                                             "BTN_A",                                            // A
                                                             "BTN_B",                                            // B
                                                             "BTN_X",                                            // X
@@ -71,9 +74,13 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                             "BTN_TR",                                           // Right Bumper
                                                             "BTN_TR2",                                          // Right Trigger
                                                             "BTN_THUMBR",                                       // Right Stick
-                                                            "BTN_START"                                         // Start
-    };
-
+                                                            "BTN_START",                                         // Start
+                                                            "ABS_X",
+                                                            "ABS_Y",
+                                                            "ABS_RX",
+                                                            "ABS_RY",
+                                                            "BTN_MODE"
+                                                            };
 
     private string[] controller_button_icons =      {
                                                         "controller-button-primary",                            // A
@@ -94,9 +101,10 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                         "controller-button-right-middle",                       // Start
                                                     };
 
+
     private Retro.JoypadId[] controller_buttons =   {
-                                                        Retro.JoypadId.A,                                       // A
-                                                        Retro.JoypadId.B,                                       // B
+                                                        Retro.JoypadId.B,                                       // A
+                                                        Retro.JoypadId.A,                                       // B
                                                         Retro.JoypadId.X,                                       // X
                                                         Retro.JoypadId.Y,                                       // Y
                                                         Retro.JoypadId.UP,                                      // Dpad Up
@@ -116,6 +124,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     bool ready = true;
 
     private ulong handler_id; // For disconnecting from signals
+    private ulong handler_id_2;
 
     public ControlWindow (MainWindow main_window) {
         Object (
@@ -128,15 +137,10 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
 
-        device_name = new Gtk.Label ("");
-        monitor = new Manette.Monitor ();
-        monitor_iter = monitor.iterate ();
+
 
         key_joypad_mapping = new Retro.KeyJoypadMapping ();
 
-        monitor.device_connected.connect ( (device) => {
-            refresh_controller (device);
-        });
 
 
         window_grid = new Gtk.Grid ();
@@ -164,6 +168,13 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
         // Ready to set up the controller
         control_setup.clicked.connect ( () => {
+            device_name = new Gtk.Label ("");
+            monitor = new Manette.Monitor ();
+            monitor_iter = monitor.iterate ();
+
+            monitor.device_connected.connect ( (device) => {
+                refresh_controller (device);
+            });
             controller_image.icon_name = controller_button_icons [0];
 
             // Check to see if there is a controller connected
@@ -172,9 +183,19 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 message (device.get_name ());
                 device_name.label = device.get_name ();
 
-
+                // Set current_button to event
                 handler_id = device.event.connect ( (device_event) => {
                     set_button_from_controller_event (device_event);
+                });
+
+                // Skip this button
+                handler_id_2 = key_press_event.connect ( (key_event) => {
+                    if (key_event.keyval == Gdk.Key.Escape) {
+                        current_button ++;
+                        controller_image.icon_name = controller_button_icons [current_button];
+
+                    }
+                    return false;
                 });
 
             }
@@ -204,6 +225,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     // Destructor
     ~ControlWindow () {
         // Save controls
+
         if (key_joypad_mapping != null) {
         uint16 current_key;
         var xml_file = GLib.Path.build_filename (Application.instance.data_dir + "/controls.xml");
@@ -225,18 +247,12 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 }
                 message ("Saved retro->gamepad controls");
             }
-            // Controls are based on an SDL string for controllers
-            else {
-                Xml.Node* child = new Xml.Node (null, "control");
-
-                child->new_prop ("gamepad_string", gamepad_mapper.build_sdl_string ());
-                root_node->add_child (child);
-                message ("Saved gamepad SDL string");
-            }
+            // Controls are automatically saved if the device is a controller. Libmanette is awesome :D
 
         doc->save_format_file (xml_file, 1);
         delete doc;
         }
+
     }
 
 
@@ -258,6 +274,11 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             set_button_from_controller_event (device_event);
         });
     }
+
+
+
+
+
 
     // Set a button from a controller event
     private void set_button_from_controller_event (Manette.Event device_event) {
@@ -281,7 +302,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 device_event.get_hat (out axis, out val);
                 debug ("axis: %s, value: %s, button: %s", axis.to_string (), val.to_string (), standard_gamepad_inputs_as_string [current_button]);
 
-                gamepad_mapper.set_hat_mapping ((uint8) device_event.get_hardware_index (), (int32) val, STANDARD_GAMEPAD_INPUTS [current_button ++]);
+                gamepad_mapper.set_hat_mapping ((uint8) device_event.get_hardware_index (), val, STANDARD_GAMEPAD_INPUTS [current_button ++]);
 
                 message ("Button was set for %s using %s.%s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string (), val.to_string ());
                 ready = false;
@@ -295,12 +316,48 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         }
         // Analog stick event. We'll deal with this later
         else if (device_event_type == Manette.EventType.EVENT_ABSOLUTE) {
-            message ("Absolute event");
+            if (ready) {
+                uint16 axis;
+                double val;
+                device_event.get_absolute (out axis, out val);
+
+                debug ("axis: %s, value: %s, button: %s", axis.to_string (), val.to_string (), standard_gamepad_inputs_as_string [current_button]);
+                // FIXME:
+                    /*  https://github.com/Timecraft/retro-games/issues/4#issuecomment-592113102
+                        Of course, because it's analog :) In Games we check whether it's larger than 0.8 (or smaller than -0.8),
+                        but it's indeed not ideal right now and it's easy to accidentally map 2
+                    */
+                    
+                if (-0.8 < val < 0.8) {
+        			return;
+        		}
+                int range = 0;
+            	
+            	if (STANDARD_GAMEPAD_INPUTS [current_button].code == EventCode.BTN_DPAD_UP ||
+            		STANDARD_GAMEPAD_INPUTS [current_button].code == EventCode.BTN_DPAD_DOWN ||
+            		STANDARD_GAMEPAD_INPUTS [current_button].code == EventCode.BTN_DPAD_LEFT ||
+            		STANDARD_GAMEPAD_INPUTS [current_button].code == EventCode.BTN_DPAD_RIGHT) {
+            		    range = val > 0 ? 1 : -1;
+            		}
+            		
+                gamepad_mapper.set_axis_mapping ((uint8) device_event.get_hardware_index (), range,  STANDARD_GAMEPAD_INPUTS [current_button++]);
+                
+                ready = false;
+            }
+            else {
+                uint16 axis;
+                double val;
+                device_event.get_absolute (out axis, out val);
+                if (-0.1 < val < 0.1) {
+                    ready = true;
+                }
+            }
         }
         // All buttons have been set
         if (current_button >= total_buttons) {
             controller_image.icon_name = "controller-outline";
             device.disconnect (handler_id);
+            disconnect (handler_id_2);
             device.save_user_mapping (gamepad_mapper.build_sdl_string ());
             message (gamepad_mapper.build_sdl_string ());
             current_button = 0;
