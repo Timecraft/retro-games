@@ -265,28 +265,30 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         
         
         // Button press
-        if (device_event_type == Manette.EventType.EVENT_BUTTON_RELEASE) {
+        if (device_event_type == Manette.EventType.EVENT_BUTTON_PRESS) {
                                                                                                             // Get the current button index, then increment it
             gamepad_mapper.set_button_mapping ((uint8) device_event.get_hardware_index (), STANDARD_GAMEPAD_INPUTS [current_button ++]);
-            message ("Button was released");
+            debug ("device hardware index: %s", device_event.get_hardware_index ());
+            message ("Button was pressed");
             message ("Button set for %s using %s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string ());
         }
         // Hat event
         else if (device_event_type == Manette.EventType.EVENT_HAT) {
             // Wait for hat to be released
             if (ready) {
-
+                uint16 axis;
+                int8 val;
+                device_event.get_hat (out axis, out val);
+                debug ("axis: %s, value: %s, button: %s", axis.to_string (), val.to_string (), standard_gamepad_inputs_as_string [current_button]);
+                
+                message ("Button was set for %s using %s.%s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string (), val.to_string ());
                 ready = false;
             }
             // Hat has been released
             else {
-                uint16 axis;
-                int8 val;
-                device_event.get_hat (out axis, out val);
-                gamepad_mapper.set_hat_mapping ((uint8) device_event.get_hardware_index (), (int32) val, STANDARD_GAMEPAD_INPUTS [current_button ++]);
-                message ("Hat event");
+                
                 ready = true;
-                message ("Button was set for %s using %s.%s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string (), val.to_string ());
+                
             }
         }
         // Analog stick event. We'll deal with this later
