@@ -30,48 +30,48 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
     private const GamepadInput[] STANDARD_GAMEPAD_INPUTS = {
-    		{ EventCode.EV_KEY, EventCode.BTN_A },
-    		{ EventCode.EV_KEY, EventCode.BTN_B },
-    		{ EventCode.EV_KEY, EventCode.BTN_X },
-    		{ EventCode.EV_KEY, EventCode.BTN_Y },
-    		{ EventCode.EV_KEY, EventCode.BTN_DPAD_UP },
-    		{ EventCode.EV_KEY, EventCode.BTN_DPAD_DOWN },
-    		{ EventCode.EV_KEY, EventCode.BTN_DPAD_LEFT },
-    		{ EventCode.EV_KEY, EventCode.BTN_DPAD_RIGHT },
-    		{ EventCode.EV_KEY, EventCode.BTN_TL },
-    		{ EventCode.EV_KEY, EventCode.BTN_TL2 },
-    		{ EventCode.EV_KEY, EventCode.BTN_THUMBL },
-    		{ EventCode.EV_KEY, EventCode.BTN_SELECT },
-    		{ EventCode.EV_KEY, EventCode.BTN_TR },
-    		{ EventCode.EV_KEY, EventCode.BTN_TR2 },
-    		{ EventCode.EV_KEY, EventCode.BTN_THUMBR },
-    		{ EventCode.EV_KEY, EventCode.BTN_START },
-    		
-    		{ EventCode.EV_KEY, EventCode.BTN_MODE },
+    		                                                { EventCode.EV_KEY, EventCode.BTN_A },              // A
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_B },              // B
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_X },              // X
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_Y },              // Y
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_DPAD_UP },        // Dpad Up
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_DPAD_DOWN },      // Dpad Down
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_DPAD_LEFT },      // Dpad Left
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_DPAD_RIGHT },     // Dpad Right
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_TL },             // Left Bumper
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_TL2 },            // Left Trigger
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_THUMBL },         // Left Stick
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_SELECT },         // Select
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_TR },             // Right Bumper
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_TR2 },            // Right Trigger
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_THUMBR },         // Right Stick
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_START },          // Start
 
-    		{ EventCode.EV_ABS, EventCode.ABS_X },
-    		{ EventCode.EV_ABS, EventCode.ABS_Y },
-    		{ EventCode.EV_ABS, EventCode.ABS_RX },
-    		{ EventCode.EV_ABS, EventCode.ABS_RY },
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_MODE },           // ??
+
+                                                    		{ EventCode.EV_ABS, EventCode.ABS_X },              // Left Analog Stick X?
+                                                    		{ EventCode.EV_ABS, EventCode.ABS_Y },              // Left Analog Stick Y?
+                                                    		{ EventCode.EV_ABS, EventCode.ABS_RX },             // Right Analog Stick X?
+                                                    		{ EventCode.EV_ABS, EventCode.ABS_RY },             // Right Analog Stick Y?
     	};
 
-    private string[] standard_gamepad_inputs_as_string = {
-        "BTN_A",
-        "BTN_B",
-        "BTN_X",
-        "BTN_Y",
-        "BTN_DPAD_UP",
-        "BTN_DPAD_DOWN",
-        "BTN_DPAD_LEFT",
-        "BTN_DPAD_RIGHT",
-        "BTN_TL",
-        "BTN_TL2",
-        "BTN_THUMBL",
-        "BTN_SELECT",
-        "BTN_TR",
-        "BTN_TR2",
-        "BTN_THUMBR",
-        "BTN_START"
+    private string[] standard_gamepad_inputs_as_string =    {
+                                                            "BTN_A",            // A
+                                                            "BTN_B",            // B
+                                                            "BTN_X",            // X
+                                                            "BTN_Y",            // Y
+                                                            "BTN_DPAD_UP",      // Dpad Up
+                                                            "BTN_DPAD_DOWN",    // Dpad Down
+                                                            "BTN_DPAD_LEFT",    // Dpad Left
+                                                            "BTN_DPAD_RIGHT",   // Dpad Right
+                                                            "BTN_TL",           // Left Bumper
+                                                            "BTN_TL2",          // Left Trigger
+                                                            "BTN_THUMBL",       // Left Stick
+                                                            "BTN_SELECT",       // Select
+                                                            "BTN_TR",           // Right Bumper
+                                                            "BTN_TR2",          // Right Trigger
+                                                            "BTN_THUMBR",       // Right Stick
+                                                            "BTN_START"         // Start
     };
 
 
