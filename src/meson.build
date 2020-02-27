@@ -37,6 +37,7 @@ executable (
     join_paths ('widgets/install_game_button.vala'),
     join_paths ('widgets/control_button.vala'),
     join_paths ('widgets/control_window.vala'),
+    join_paths ('widgets/control_headerbar.vala'),
     
     
     asresources,
