@@ -56,61 +56,61 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     	};
 
     private string[] standard_gamepad_inputs_as_string =    {
-                                                            "BTN_A",            // A
-                                                            "BTN_B",            // B
-                                                            "BTN_X",            // X
-                                                            "BTN_Y",            // Y
-                                                            "BTN_DPAD_UP",      // Dpad Up
-                                                            "BTN_DPAD_DOWN",    // Dpad Down
-                                                            "BTN_DPAD_LEFT",    // Dpad Left
-                                                            "BTN_DPAD_RIGHT",   // Dpad Right
-                                                            "BTN_TL",           // Left Bumper
-                                                            "BTN_TL2",          // Left Trigger
-                                                            "BTN_THUMBL",       // Left Stick
-                                                            "BTN_SELECT",       // Select
-                                                            "BTN_TR",           // Right Bumper
-                                                            "BTN_TR2",          // Right Trigger
-                                                            "BTN_THUMBR",       // Right Stick
-                                                            "BTN_START"         // Start
+                                                            "BTN_A",                                            // A
+                                                            "BTN_B",                                            // B
+                                                            "BTN_X",                                            // X
+                                                            "BTN_Y",                                            // Y
+                                                            "BTN_DPAD_UP",                                      // Dpad Up
+                                                            "BTN_DPAD_DOWN",                                    // Dpad Down
+                                                            "BTN_DPAD_LEFT",                                    // Dpad Left
+                                                            "BTN_DPAD_RIGHT",                                   // Dpad Right
+                                                            "BTN_TL",                                           // Left Bumper
+                                                            "BTN_TL2",                                          // Left Trigger
+                                                            "BTN_THUMBL",                                       // Left Stick
+                                                            "BTN_SELECT",                                       // Select
+                                                            "BTN_TR",                                           // Right Bumper
+                                                            "BTN_TR2",                                          // Right Trigger
+                                                            "BTN_THUMBR",                                       // Right Stick
+                                                            "BTN_START"                                         // Start
     };
 
 
     private string[] controller_button_icons =      {
-                                                        "controller-button-primary",        // A
-                                                        "controller-button-secondary",      // B
-                                                        "controller-button-tertiary",       // X
-                                                        "controller-button-quaternary",     // Y
-                                                        "controller-button-dpad-up",        // D-Pad Up
-                                                        "controller-button-dpad-down",      // D-Pad Down
-                                                        "controller-button-dpad-left",      // D-Pad Left
-                                                        "controller-button-dpad-right",     // D-Pad Right
-                                                        "controller-button-left-bumper",    // L1
-                                                        "controller-button-left-trigger",   // L2
-                                                        "controller-button-left-stick",     // L3
-                                                        "controller-button-left-middle",    // Select
-                                                        "controller-button-right-bumper",   // R1
-                                                        "controller-button-right-trigger",  // R2
-                                                        "controller-button-right-stick",    // R3
-                                                        "controller-button-right-middle",   // Start
+                                                        "controller-button-primary",                            // A
+                                                        "controller-button-secondary",                          // B
+                                                        "controller-button-tertiary",                           // X
+                                                        "controller-button-quaternary",                         // Y
+                                                        "controller-button-dpad-up",                            // DPad Up
+                                                        "controller-button-dpad-down",                          // DPad Down
+                                                        "controller-button-dpad-left",                          // DPad Left                    
+                                                        "controller-button-dpad-right",                         // DPad Right                    
+                                                        "controller-button-left-bumper",                        // Left Bumper                    
+                                                        "controller-button-left-trigger",                       // Left Trigger
+                                                        "controller-button-left-stick",                         // Left Stick
+                                                        "controller-button-left-middle",                        // Select
+                                                        "controller-button-right-bumper",                       // Right Bumper
+                                                        "controller-button-right-trigger",                      // Right Trigger
+                                                        "controller-button-right-stick",                        // Right Stick
+                                                        "controller-button-right-middle",                       // Start
                                                     };
 
     private Retro.JoypadId[] controller_buttons =   {
-                                                        Retro.JoypadId.A,
-                                                        Retro.JoypadId.B,
-                                                        Retro.JoypadId.X,
-                                                        Retro.JoypadId.Y,
-                                                        Retro.JoypadId.UP,
-                                                        Retro.JoypadId.DOWN,
-                                                        Retro.JoypadId.LEFT,
-                                                        Retro.JoypadId.RIGHT,
-                                                        Retro.JoypadId.L,
-                                                        Retro.JoypadId.L2,
-                                                        Retro.JoypadId.L3,
-                                                        Retro.JoypadId.SELECT,
-                                                        Retro.JoypadId.R,
-                                                        Retro.JoypadId.R2,
-                                                        Retro.JoypadId.R3,
-                                                        Retro.JoypadId.START
+                                                        Retro.JoypadId.A,                                       // A
+                                                        Retro.JoypadId.B,                                       // B
+                                                        Retro.JoypadId.X,                                       // X
+                                                        Retro.JoypadId.Y,                                       // Y
+                                                        Retro.JoypadId.UP,                                      // Dpad Up
+                                                        Retro.JoypadId.DOWN,                                    // Dpad Down
+                                                        Retro.JoypadId.LEFT,                                    // Dpad Left
+                                                        Retro.JoypadId.RIGHT,                                   // Dpad Right
+                                                        Retro.JoypadId.L,                                       // Left Bumper
+                                                        Retro.JoypadId.L2,                                      // Left Trigger
+                                                        Retro.JoypadId.L3,                                      // Left Stick
+                                                        Retro.JoypadId.SELECT,                                  // Select
+                                                        Retro.JoypadId.R,                                       // Right Bumper
+                                                        Retro.JoypadId.R2,                                      // Right Trigger
+                                                        Retro.JoypadId.R3,                                      // Right Stick
+                                                        Retro.JoypadId.START                                    // Start
                                                     };
 
     bool ready = true;
@@ -210,7 +210,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         Xml.Doc* doc = new Xml.Doc ("1.0");
         Xml.Node* root_node = new Xml.Node (null, "controls");
         doc->set_root_element (root_node);
-
+            
+            // Controls are based on keyboard
             if (device == null) {
                 foreach (Retro.JoypadId current_id in controller_buttons) {
 
@@ -224,6 +225,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 }
                 message ("Saved retro->gamepad controls");
             }
+            // Controls are based on an SDL string for controllers
             else {
                 Xml.Node* child = new Xml.Node (null, "control");
 
@@ -248,33 +250,35 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         }
     }
 
-
+    // Controller has been connected
     private void refresh_controller (Manette.Device device) {
         message (device.get_name ());
         device_name.label = device.get_name ();
         handler_id = device.event.connect ( (device_event) => {
             set_button_from_controller_event (device_event);
         });
-
-
-
     }
 
     // Set a button from a controller event
     private void set_button_from_controller_event (Manette.Event device_event) {
         Manette.EventType device_event_type = device_event.get_event_type ();
-
+        
+        
+        // Button press
         if (device_event_type == Manette.EventType.EVENT_BUTTON_RELEASE) {
                                                                                                             // Get the current button index, then increment it
             gamepad_mapper.set_button_mapping ((uint8) device_event.get_hardware_index (), STANDARD_GAMEPAD_INPUTS [current_button ++]);
             message ("Button was released");
             message ("Button set for %s using %s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string ());
         }
+        // Hat event
         else if (device_event_type == Manette.EventType.EVENT_HAT) {
+            // Wait for hat to be released
             if (ready) {
 
                 ready = false;
             }
+            // Hat has been released
             else {
                 uint16 axis;
                 int8 val;
@@ -285,9 +289,11 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 message ("Button was set for %s using %s.%s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string (), val.to_string ());
             }
         }
+        // Analog stick event. We'll deal with this later
         else if (device_event_type == Manette.EventType.EVENT_ABSOLUTE) {
             message ("Absolute event");
         }
+        // All buttons have been set
         if (current_button >= total_buttons) {
             controller_image.icon_name = "controller-outline";
             device.disconnect (handler_id);
