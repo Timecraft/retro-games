@@ -281,6 +281,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 device_event.get_hat (out axis, out val);
                 debug ("axis: %s, value: %s, button: %s", axis.to_string (), val.to_string (), standard_gamepad_inputs_as_string [current_button]);
 
+                gamepad_mapper.set_hat_mapping ((uint8) device_event.get_hardware_index (), (int32) val, STANDARD_GAMEPAD_INPUTS [current_button ++]);
+
                 message ("Button was set for %s using %s.%s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string (), val.to_string ());
                 ready = false;
             }
