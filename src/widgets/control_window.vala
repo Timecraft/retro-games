@@ -82,9 +82,9 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                         "controller-button-quaternary",                         // Y
                                                         "controller-button-dpad-up",                            // DPad Up
                                                         "controller-button-dpad-down",                          // DPad Down
-                                                        "controller-button-dpad-left",                          // DPad Left                    
-                                                        "controller-button-dpad-right",                         // DPad Right                    
-                                                        "controller-button-left-bumper",                        // Left Bumper                    
+                                                        "controller-button-dpad-left",                          // DPad Left
+                                                        "controller-button-dpad-right",                         // DPad Right
+                                                        "controller-button-left-bumper",                        // Left Bumper
                                                         "controller-button-left-trigger",                       // Left Trigger
                                                         "controller-button-left-stick",                         // Left Stick
                                                         "controller-button-left-middle",                        // Select
@@ -210,7 +210,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         Xml.Doc* doc = new Xml.Doc ("1.0");
         Xml.Node* root_node = new Xml.Node (null, "controls");
         doc->set_root_element (root_node);
-            
+
             // Controls are based on keyboard
             if (device == null) {
                 foreach (Retro.JoypadId current_id in controller_buttons) {
@@ -262,13 +262,13 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     // Set a button from a controller event
     private void set_button_from_controller_event (Manette.Event device_event) {
         Manette.EventType device_event_type = device_event.get_event_type ();
-        
-        
+
+
         // Button press
         if (device_event_type == Manette.EventType.EVENT_BUTTON_PRESS) {
                                                                                                             // Get the current button index, then increment it
             gamepad_mapper.set_button_mapping ((uint8) device_event.get_hardware_index (), STANDARD_GAMEPAD_INPUTS [current_button ++]);
-            debug ("device hardware index: %s", device_event.get_hardware_index ());
+            debug ("device hardware index: %s", device_event.get_hardware_index ().to_string ());
             message ("Button was pressed");
             message ("Button set for %s using %s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string ());
         }
@@ -280,15 +280,15 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 int8 val;
                 device_event.get_hat (out axis, out val);
                 debug ("axis: %s, value: %s, button: %s", axis.to_string (), val.to_string (), standard_gamepad_inputs_as_string [current_button]);
-                
+
                 message ("Button was set for %s using %s.%s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string (), val.to_string ());
                 ready = false;
             }
             // Hat has been released
             else {
-                
+
                 ready = true;
-                
+
             }
         }
         // Analog stick event. We'll deal with this later
