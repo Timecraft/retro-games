@@ -47,13 +47,13 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                     		{ EventCode.EV_KEY, EventCode.BTN_THUMBR },         // Right Stick
                                                     		{ EventCode.EV_KEY, EventCode.BTN_START },          // Start
 
-                                                    		
+
 
                                                     		{ EventCode.EV_ABS, EventCode.ABS_X },              // Left Analog Stick X
                                                     		{ EventCode.EV_ABS, EventCode.ABS_Y },              // Left Analog Stick Y
                                                     		{ EventCode.EV_ABS, EventCode.ABS_RX },             // Right Analog Stick X
                                                     		{ EventCode.EV_ABS, EventCode.ABS_RY },             // Right Analog Stick Y
-                                                    		
+
                                                     		{ EventCode.EV_KEY, EventCode.BTN_MODE },           // Home
     	};
 
@@ -99,6 +99,11 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                         "controller-button-right-trigger",                      // Right Trigger
                                                         "controller-button-right-stick",                        // Right Stick
                                                         "controller-button-right-middle",                       // Start
+                                                        "controller-button-middle",                             // Home
+                                                        "controller-stick-left-horizontal",                     // Left Analog Stick X
+                                                        "controller-stick-left-vertical",                       // Left Analog Stick Y
+                                                        "controller-stick-right-horizontal",                    // Right Analog Stick X
+                                                        "controller-stick-right-vertical"                       // Right Analog Stick Y
                                                     };
 
 
@@ -327,21 +332,21 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                         Of course, because it's analog :) In Games we check whether it's larger than 0.8 (or smaller than -0.8),
                         but it's indeed not ideal right now and it's easy to accidentally map 2
                     */
-                    
+
                 if (-0.8 < val < 0.8) {
         			return;
         		}
                 int range = 0;
-            	
+
             	if (STANDARD_GAMEPAD_INPUTS [current_button].code == EventCode.BTN_DPAD_UP ||
             		STANDARD_GAMEPAD_INPUTS [current_button].code == EventCode.BTN_DPAD_DOWN ||
             		STANDARD_GAMEPAD_INPUTS [current_button].code == EventCode.BTN_DPAD_LEFT ||
             		STANDARD_GAMEPAD_INPUTS [current_button].code == EventCode.BTN_DPAD_RIGHT) {
             		    range = val > 0 ? 1 : -1;
             		}
-            		
+
                 gamepad_mapper.set_axis_mapping ((uint8) device_event.get_hardware_index (), range,  STANDARD_GAMEPAD_INPUTS [current_button++]);
-                
+
                 ready = false;
             }
             else {
