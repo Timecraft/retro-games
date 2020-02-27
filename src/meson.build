@@ -20,6 +20,7 @@ executable (
     join_paths ('core/core.vala'),
     join_paths ('core/view.vala'),
     join_paths ('core/retro_gamepad.vala'),
+    join_paths ('core/gamepad_mapping_builder.vala'),
     
     
     # Widget files

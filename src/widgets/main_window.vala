@@ -13,13 +13,15 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
     public RetroGame.Application retro_application {get; construct;}
 
     public Retro.KeyJoypadMapping key_joypad_mapping = null;
-    
+
     public RetroGamepad gamepad;
 
 
     // Let's all other widgets know which grid is currently active
     public string current_grid;
 
+    
+    private string gamepad_string;
 
 
 
@@ -65,8 +67,17 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         for (Xml.Node* node = root->children; node != null; node = node->next) {
             var retro_control = node->get_prop ("retro");
             var gamepad_control = node->get_prop ("gamepad");
+            
             if (!(retro_control == null && gamepad_control == null)) {
                 key_joypad_mapping.set_button_key (Retro.JoypadId.from_button_code ((uint16) uint64.parse (retro_control)), (uint16) uint64.parse (gamepad_control));
+            }
+            else if (retro_control == null && gamepad_control == null) {
+                var gamepad_string_control = node->get_prop ("gamepad_string");
+                if (gamepad_string_control != null) {
+                    gamepad_string = gamepad_string_control;
+                    message (gamepad_string);
+                }
+                
             }
         }
         delete doc;
@@ -120,25 +131,24 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
     }
 
     public void load_game_view (Retro.Core core) {
-        
+
         if (gamepad == null) {
             var monitor = new Manette.Monitor ();
             var monitor_iter = monitor.iterate ();
             Manette.Device device;
             monitor_iter.next (out device);
-            
-            if (device != null) { 
+            device.save_user_mapping (gamepad_string);
+            if (device != null) {
                 gamepad = new RetroGamepad (device);
             }
         }
-        
+
         remove (game_grid);
         game_grid.destroy ();
         game_view_instance = new View (core, this);
-        message (this.key_joypad_mapping.get_button_key (Retro.JoypadId.START).to_string ());
         add (game_view_instance.game_view);
         game_view_instance.game_view.grab_focus ();
-        
+
 
         /* Used for creating a log for an issue on retro-gtk's gitlab repo
         bool key_is_pressed = false;
@@ -146,7 +156,7 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         core.video_output.connect ( () => {
             message (core.get_frames_per_second ().to_string ());
         });
-        
+
         game_view_instance.game_view.key_release_event.connect ( (key) => {
             if (key.keyval == Gdk.Key.Up && key_is_pressed) {
                 message ("Up arrow released");
