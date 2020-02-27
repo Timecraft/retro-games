@@ -75,7 +75,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="268.01659"
+     inkscape:cx="28.730873"
      inkscape:cy="275.56581"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -241,5 +241,11 @@
        x="26"
        y="232"
        ry="0.25303188" />
+    <circle
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.53450596;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       id="path1363-3"
+       cx="63.869064"
+       cy="222.54759"
+       r="2.5" />
   </g>
 </svg>
