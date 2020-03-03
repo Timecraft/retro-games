@@ -434,7 +434,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             return;
         }
 
-        
+
 
     }
 
@@ -465,6 +465,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         skip_button.disconnect (handler_id_3);
 
         reset ();
+        control_view.done_mapping ();
 
         return;
     }

@@ -262,6 +262,7 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         button_ids [current_iter].highlight = true;
         message ("Current Button: %s", button_ids[current_iter].button_id);
         queue_draw ();
+
     }
 
     public void reset_mapping () {
@@ -270,6 +271,9 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         }
     }
 
+    public void done_mapping () {
+        connect_to_gamepad ();
+    }
 
     public void start_mapping_gamepad () {
         disconnect_from_gamepad ();
