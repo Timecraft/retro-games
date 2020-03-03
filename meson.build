@@ -19,7 +19,7 @@ add_global_arguments ('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name ()), 
 add_global_arguments ('-DRETRO_GTK_USE_UNSTABLE_API', language:'c')
 
 vapi_dir = meson.source_root () + 'vapis/event_codes.vapi'
-#add_global_arguments ('--vapidir ' + vapi_dir, language:'vala')
+add_global_arguments ('--vapidir=' + meson.source_root () + '/vapis', language:'vala')
 
 # C Compiler
 cc = meson.get_compiler ('c')

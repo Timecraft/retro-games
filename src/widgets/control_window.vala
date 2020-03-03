@@ -21,6 +21,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     private Gtk.Button skip_button;
 
     private MainWindow main_window;
+    
+    private ControlView control_view;
 
 
     private GamepadMappingBuilder gamepad_mapper;
@@ -162,7 +164,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         controller_image = new Gtk.Image.from_icon_name ("com.github.timecraft.retro", Gtk.IconSize.DIALOG);
         controller_image.pixel_size = 512;
 
-        controller_image.icon_name = "controller-outline";
+        //controller_image.icon_name = "controller-outline";
 
 
         control_setup = new Gtk.Button.with_label ("Set up controller");
@@ -173,14 +175,30 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         skip_button.hide ();
         
         device_name = new Gtk.Label ("");
-
+        
+        window_grid.set_row_spacing (12);
+        window_grid.set_column_spacing (12);
+        
         window_grid.attach (device_name, 0, 0, 5, 3);
-        window_grid.attach (controller_image, 0, 2, 5, 3);
+        //window_grid.attach (controller_image, 0, 2, 5, 3);
         window_grid.attach (control_setup, 2, 5, 1, 1);
         
         
+        monitor = new Manette.Monitor ();
+        monitor_iter = monitor.iterate ();
+
+        monitor.device_connected.connect ( (device) => {
+            refresh_controller (device);
+        });
         
-        
+        bool worked = monitor_iter.next (out device);
+        if (worked) {
+            message (device.get_name ());
+            device_name.label = device.get_name ();
+            
+            
+        }
+        change_image_for_buttons ();
 
         // Ready to set up the controller
         control_setup.clicked.connect ( () => {
@@ -189,19 +207,13 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             skip_button.show ();
             
             
-            monitor = new Manette.Monitor ();
-            monitor_iter = monitor.iterate ();
-
-            monitor.device_connected.connect ( (device) => {
-                refresh_controller (device);
-            });
+            
             controller_image.icon_name = controller_button_icons [0];
 
             // Check to see if there is a controller connected
-            bool worked = monitor_iter.next (out device);
+            
             if (worked) {
-                message (device.get_name ());
-                device_name.label = device.get_name ();
+                
 
                 // Set current_button to event
                 handler_id = device.event.connect ( (device_event) => {
@@ -459,4 +471,16 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         controller_image.icon_name = "controller-outline";
     }
 
+
+    private void change_image_for_buttons () {
+        control_view = new ControlView ();
+        window_grid.attach (control_view, 0, 2, 5, 3);
+        
+        
+        
+    }
+    
+    private void stop_change_image_for_buttons () {
+        
+    }
 }

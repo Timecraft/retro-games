@@ -4,7 +4,8 @@
 #   Dependencies
 #   Install
 
-extra_dir = join_paths (meson.source_root (), 'src/core/vapis')
+input_dir = join_paths (meson.source_root (), 'src/core/vapis')
+
 
 executable (
     meson.project_name (),
@@ -38,6 +39,7 @@ executable (
     join_paths ('widgets/control_button.vala'),
     join_paths ('widgets/control_window.vala'),
     join_paths ('widgets/control_headerbar.vala'),
+    join_paths ('widgets/control_view.vala'),
     
     
     asresources,
@@ -51,9 +53,10 @@ executable (
         dependency ('gmodule-2.0'),
         dependency ('manette-0.2'),
         dependency ('libxml-2.0'),
+        dependency ('librsvg-2.0'),
         cc.find_library('m'),
-        valac.find_library ('event-codes', dirs: extra_dir)
+        valac.find_library ('event-codes', dirs: input_dir)
     ],
-    c_args: '-I' + extra_dir,
+    c_args: '-I' + input_dir,
     install: true
 )
