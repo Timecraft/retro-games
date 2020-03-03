@@ -1,21 +1,8 @@
 // This code has been modified from gnome-games to be used in retro-games
 // This file is part of GNOME Games. License: GPL-3.0+.
 
-private struct Timecraft.RetroGame.GamepadDPad {
-	int32 axis_values[2];
-}
-
-private struct Timecraft.RetroGame.GamepadInput {
-	uint16 type;
-	uint16 code;
-}
-
-
 private class Timecraft.RetroGame.GamepadMappingBuilder : Object {
-	private struct GamepadInputSource {
-		GamepadInput input;
-		string source;
-	}
+	
 
 	private const GamepadInputSource[] INPUT_SOURCES = {
 		{ { EventCode.EV_KEY, EventCode.BTN_A }, "a" },

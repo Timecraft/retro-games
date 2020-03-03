@@ -17,11 +17,11 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     private Gtk.Button control_setup;
 
     private Gtk.Label device_name;
-    
+
     private Gtk.Button skip_button;
 
     private MainWindow main_window;
-    
+
     private ControlView control_view;
 
 
@@ -145,9 +145,9 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
         this.main_window = main_window;
 
-        
+
         this.set_titlebar (new ControlHeaderBar (this));
-        
+
 
 
 
@@ -170,72 +170,74 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         control_setup = new Gtk.Button.with_label ("Set up controller");
 
         control_setup.margin = 20;
-        
+
         skip_button = new Gtk.Button.with_label ("Hit \"Escape\" to skip this button.");
         skip_button.hide ();
-        
+
         device_name = new Gtk.Label ("");
-        
-        window_grid.set_row_spacing (12);
-        window_grid.set_column_spacing (12);
-        
+
+
+
         window_grid.attach (device_name, 0, 0, 5, 3);
-        //window_grid.attach (controller_image, 0, 2, 5, 3);
+        control_view = new ControlView ();
+        window_grid.attach (control_view, 0, 2, 5, 3);
         window_grid.attach (control_setup, 2, 5, 1, 1);
-        
-        
+
+
         monitor = new Manette.Monitor ();
         monitor_iter = monitor.iterate ();
 
         monitor.device_connected.connect ( (device) => {
             refresh_controller (device);
         });
-        
+
         bool worked = monitor_iter.next (out device);
         if (worked) {
             message (device.get_name ());
             device_name.label = device.get_name ();
-            
-            
+
+
         }
-        change_image_for_buttons ();
+
 
         // Ready to set up the controller
         control_setup.clicked.connect ( () => {
+            control_view.start_mapping_gamepad ();
+            control_view.next_button ();
             window_grid.remove (control_setup);
             window_grid.attach (skip_button, 2, 5, 1, 1);
             skip_button.show ();
-            
-            
-            
+
+
+
             controller_image.icon_name = controller_button_icons [0];
 
             // Check to see if there is a controller connected
-            
+
             if (worked) {
-                
+
 
                 // Set current_button to event
                 handler_id = device.event.connect ( (device_event) => {
                     set_button_from_controller_event (device_event);
                 });
 
-                
+
                 // Skip this button
                 handler_id_2 = key_press_event.connect ( (key_event) => {
                     // Add label to expose this capability
-                    
+
                     if (key_event.keyval == Gdk.Key.Escape) {
-                        current_button ++;
-                        controller_image.icon_name = controller_button_icons [current_button];
+                        current_button++;
+                        control_view.next_button ();
 
                     }
                     return false;
                 });
-                
-                
-                
-                
+
+
+
+
                 handler_id_3 = skip_button.clicked.connect ( () => {
                     current_button ++;
                     controller_image.icon_name = controller_button_icons [current_button];
@@ -250,25 +252,25 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                     set_button (key_event.hardware_keycode);
                     return false;
                 });
-                
+
                 // Skip this button
                 handler_id_2 = key_press_event.connect ( (key_event) => {
                     // Add label to expose this capability
-                    
+
                     if (key_event.keyval == Gdk.Key.Escape) {
-                        current_button ++;
-                        controller_image.icon_name = controller_button_icons [current_button];
+                        current_button++;
+                        control_view.next_button ();
+
 
                     }
                     return false;
                 });
-                
-                
-                
-                
+
+
+
+
                 handler_id_3 = skip_button.clicked.connect ( () => {
-                    current_button ++;
-                    controller_image.icon_name = controller_button_icons [current_button];
+                    control_view.next_button ();
                 });
             }
         });
@@ -307,7 +309,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
                     root_node->add_child (child);
                 }
-                
+
             }
             // Controls are automatically saved if the device is a controller. Libmanette is awesome :D
 
@@ -353,6 +355,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             gamepad_mapper.set_button_mapping ((uint8) device_event.get_hardware_index (), STANDARD_GAMEPAD_INPUTS [current_button ++]);
             debug ("device hardware index: %s", device_event.get_hardware_index ().to_string ());
             message ("Button set for %s using %s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string ());
+            control_view.next_button ();
         }
         // Hat event
         else if (device_event_type == Manette.EventType.EVENT_HAT) {
@@ -367,6 +370,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
                 message ("Button was set for %s using %s.%s", standard_gamepad_inputs_as_string [current_button - 1], device_event.get_hardware_index ().to_string (), val.to_string ());
                 ready = false;
+                control_view.next_button ();
             }
             // Hat has been released
             else {
@@ -382,8 +386,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 double val;
                 device_event.get_absolute (out axis, out val);
 
-                
-                
+
+
                 // Ignore analog values that are not extreme
                     // Far away from the center
                 if (-0.8 < val < 0.8) {
@@ -402,10 +406,11 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 gamepad_mapper.set_axis_mapping ((uint8) device_event.get_hardware_index (), range,  STANDARD_GAMEPAD_INPUTS [current_button++]);
 
                 ready = false;
-                
+
                 message ("Analog stick was set for %s using %s.%s", standard_gamepad_inputs_as_string [current_button - 1], axis.to_string (), val.to_string ());
-                
+
                 debug ("axis: %s, value: %s, button: %s", axis.to_string (), val.to_string (), standard_gamepad_inputs_as_string [current_button]);
+                control_view.next_button ();
             }
             else {
                 uint16 axis;
@@ -418,8 +423,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 }
             }
         }
-        
-        
+
+
         // All buttons have been set
         if (current_button >= total_buttons) {
             all_buttons_set ();
@@ -428,7 +433,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             main_window.gamepad = new RetroGamepad (device);
             return;
         }
-        controller_image.icon_name = controller_button_icons [current_button];
+
+        
 
     }
 
@@ -445,21 +451,21 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             }
             controller_image.icon_name = controller_button_icons [current_button];
         }
-        
-        
-    private void all_buttons_set () {
+
+
+    public void all_buttons_set () {
         if (device == null) {
             disconnect (handler_id);
         }
         else {
             device.disconnect (handler_id);
         }
-        
+
         disconnect (handler_id_2);
         skip_button.disconnect (handler_id_3);
-        
+
         reset ();
-        
+
         return;
     }
 
@@ -468,19 +474,10 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         window_grid.remove (skip_button);
         window_grid.attach (control_setup, 2, 5, 1, 1);
         current_button = 0;
+
         controller_image.icon_name = "controller-outline";
     }
 
 
-    private void change_image_for_buttons () {
-        control_view = new ControlView ();
-        window_grid.attach (control_view, 0, 2, 5, 3);
-        
-        
-        
-    }
-    
-    private void stop_change_image_for_buttons () {
-        
-    }
+
 }

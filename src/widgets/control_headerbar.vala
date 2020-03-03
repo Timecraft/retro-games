@@ -11,7 +11,7 @@ public class Timecraft.RetroGame.ControlHeaderBar : Gtk.HeaderBar {
         
         reset_button.clicked.connect ( () => {
             message ("Resetting control scheme");
-            
+            control_window.all_buttons_set ();
             control_window.reset ();
         });
     }
