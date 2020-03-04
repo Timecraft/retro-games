@@ -10,8 +10,6 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
     private int current_iter = -1;
 
-    private int total_buttons = 21;
-
     private double[] analog_x_pos = {0,0};
     private double[] analog_y_pos = {0,0};
 
@@ -269,7 +267,7 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
         button_ids [current_iter].highlight = false;
         current_iter ++;
-        if (current_iter >= total_buttons) {
+        if (current_iter >= INPUT_SOURCES.length) {
             return;
         }
         button_ids [current_iter].highlight = true;
