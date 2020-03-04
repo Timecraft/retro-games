@@ -10,12 +10,13 @@
 - libretro-gtk-0.14-dev
 - libmanette-0.2-dev
 - libxml2-dev
+- librsvg2-dev
 - elementary-sdk
 - meson
 
 ##### A one liner
 ```bash
-sudo apt install valac libgtk-3-dev libgranite-dev libretro-gtk-0.14-dev libmanette-0.2-dev libxml2-dev elementary-sdk meson
+sudo apt install valac libgtk-3-dev libgranite-dev libretro-gtk-0.14-dev libmanette-0.2-dev libxml2-dev librsvg2-dev elementary-sdk meson
 ```
 
 #### Installation
