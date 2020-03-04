@@ -172,6 +172,9 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
                 highlight ({ EventCode.EV_ABS, axis }, !(-0.01 < value < 0.01));
                 if (axis == 1) {
                     button_ids [18].amount = value;
+                    if (value == 0) {
+                        button_ids[18].amount = 0;
+                    }
                 }
                 else {
                     button_ids [20].amount = value;
@@ -282,7 +285,7 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
     }
 
     private void translate_analog (Cairo.Context context, Direction direction, double x, double y) {
-        
+        message ("%s,%s", x.to_string (), y.to_string ());
         context.translate (x, y);
 
     }
