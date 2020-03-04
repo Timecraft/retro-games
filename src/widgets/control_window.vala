@@ -32,6 +32,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
     private int total_buttons = 21;
 
+    private int total_buttons_retro_joypad = 15;
+
 
     private const GamepadInput[] STANDARD_GAMEPAD_INPUTS = {
                                                     		{ EventCode.EV_KEY, EventCode.BTN_B },              // A
@@ -50,6 +52,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                     		{ EventCode.EV_KEY, EventCode.BTN_TR2 },            // Right Trigger
                                                     		{ EventCode.EV_KEY, EventCode.BTN_THUMBR },         // Right Stick
                                                     		{ EventCode.EV_KEY, EventCode.BTN_START },          // Start
+                                                    		{ EventCode.EV_KEY, EventCode.BTN_MODE },           // Home
 
 
 
@@ -58,7 +61,6 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                                                     		{ EventCode.EV_ABS, EventCode.ABS_RX },             // Right Analog Stick X
                                                     		{ EventCode.EV_ABS, EventCode.ABS_RY },             // Right Analog Stick Y
 
-                                                    		{ EventCode.EV_KEY, EventCode.BTN_MODE },           // Home
     	};
 
 
@@ -186,17 +188,20 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
         monitor = new Manette.Monitor ();
         monitor_iter = monitor.iterate ();
-
+        message ("Boop");
         monitor.device_connected.connect ( (device) => {
             refresh_controller (device);
+            control_view.connect_to_gamepad ();
         });
-
+        message ("Beep");
         bool worked = monitor_iter.next (out device);
         if (worked) {
             message (device.get_name ());
             device_name.label = device.get_name ();
-
-
+        }
+        else {
+            message ("No device connected? Setting keyboard.");
+            device_name.label = "Keyboard";
         }
 
 
@@ -248,14 +253,13 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 message ("No device connected? Setting keyboard.");
                 device_name.label = "Keyboard";
 
-                handler_id = key_release_event.connect ( (key_event) => {
-                    set_button (key_event.hardware_keycode);
-                    return false;
-                });
+                
 
                 // Skip this button
                 handler_id_2 = key_press_event.connect ( (key_event) => {
-                    // Add label to expose this capability
+                    
+                    
+                    set_button (key_event.hardware_keycode);
 
                     if (key_event.keyval == Gdk.Key.Escape) {
                         current_button++;
@@ -291,31 +295,32 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         // Save controls
 
         if (key_joypad_mapping != null) {
-        uint16 current_key;
-        var xml_file = GLib.Path.build_filename (Application.instance.data_dir + "/controls.xml");
-        Xml.Doc* doc = new Xml.Doc ("1.0");
-        Xml.Node* root_node = new Xml.Node (null, "controls");
-        doc->set_root_element (root_node);
+            uint16 current_key;
+            var xml_file = GLib.Path.build_filename (Application.instance.data_dir + "/controls.xml");
+            Xml.Doc* doc = new Xml.Doc ("1.0");
+            Xml.Node* root_node = new Xml.Node (null, "controls");
+            doc->set_root_element (root_node);
 
-            // Controls are based on keyboard
-            if (device == null) {
-                foreach (Retro.JoypadId current_id in controller_buttons) {
+                // Controls are based on keyboard
+                if (device == null) {
+                    foreach (Retro.JoypadId current_id in controller_buttons) {
 
-                    Xml.Node* child = new Xml.Node (null, "control");
+                        Xml.Node* child = new Xml.Node (null, "control");
 
-                    current_key = key_joypad_mapping.get_button_key (current_id);
-                    child->new_prop ("retro", current_id.to_button_code ().to_string ());
-                    child->new_prop ("gamepad", current_key.to_string ());
+                        current_key = key_joypad_mapping.get_button_key (current_id);
+                        child->new_prop ("retro", current_id.to_button_code ().to_string ());
+                        child->new_prop ("gamepad", current_key.to_string ());
 
-                    root_node->add_child (child);
+                        root_node->add_child (child);
+                    }
+
                 }
+                // Controls are automatically saved if the device is a controller. Libmanette is awesome :D
 
-            }
-            // Controls are automatically saved if the device is a controller. Libmanette is awesome :D
-
-        doc->save_format_file (xml_file, 1);
-        delete doc;
+            doc->save_format_file (xml_file, 1);
+            delete doc;
         }
+        current_button = 0;
 
     }
 
@@ -334,9 +339,6 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     private void refresh_controller (Manette.Device device) {
         message (device.get_name ());
         device_name.label = device.get_name ();
-        handler_id = device.event.connect ( (device_event) => {
-            set_button_from_controller_event (device_event);
-        });
     }
 
 
@@ -444,9 +446,12 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     private void set_button (uint16? key_val) {
             key_joypad_mapping.set_button_key (controller_buttons [current_button], key_val);
             current_button ++;
-            if (current_button >= total_buttons) {
-                all_buttons_set ();
+            message ("Button Pressed");
+            control_view.next_button ();
+            if (current_button >= total_buttons_retro_joypad) {
                 main_window.key_joypad_mapping = this.key_joypad_mapping;
+                all_buttons_set ();
+
                 return;
             }
             controller_image.icon_name = controller_button_icons [current_button];
@@ -454,12 +459,10 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
     public void all_buttons_set () {
-        if (device == null) {
-            disconnect (handler_id);
-        }
-        else {
+        if (device != null) {
             device.disconnect (handler_id);
         }
+        
 
         disconnect (handler_id_2);
         skip_button.disconnect (handler_id_3);

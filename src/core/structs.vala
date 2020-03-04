@@ -15,8 +15,7 @@ public struct Timecraft.RetroGame.GamepadInputSource {
 public struct Timecraft.RetroGame.HighlightId {
     string button_id;
     bool highlight;
+    Direction? direction;
+    double amount;
 }
-/*
-uint16, uint1pu6, string
-;
-*/
+
