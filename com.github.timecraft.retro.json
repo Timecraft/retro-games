@@ -1,0 +1,83 @@
+{
+    "app-id" : "com.github.timecraft.retro",
+    "base": "io.elementary.BaseApp",
+    "base-version": "juno-19.08",
+    "runtime": "org.freedesktop.Platform",
+    "sdk": "org.freedesktop.Sdk",
+    "runtime-version": "19.08",
+    "command" : "com.github.timecraft.retro",
+    "finish-args" : [
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--device=dri",
+        "--socket=pulseaudio",
+        "--device=all",
+        "--filesystem=host"
+    ],
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/share/pkgconfig",
+        "/share/aclocal",
+        "/man",
+        "/share/man",
+        "/share/gtk-doc",
+        "*.la",
+        "*.a",
+        "/lib/girepository-1.0",
+        "/share/doc",
+        "/share/gir-1.0"
+    ],
+    "modules" : [
+        {
+            "name" : "libevdev",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dtests=disabled",
+                "-Ddocumentation=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.freedesktop.org/libevdev/libevdev.git"
+                }
+            ]
+        },
+        {
+            "name" : "manette",
+            "buildsystem" : "meson",
+            "config-opts" : [
+                "-Dgudev=disabled"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/aplazas/libmanette.git"
+                }
+            ]
+        },
+        {
+            "name" : "retro-gtk",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/retro-gtk.git",
+                    "branch" : "retro-gtk-0-18"
+                }
+            ]
+        },
+        {
+            "name" : "retro-games",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/Timecraft/retro-games.git"
+                }
+            ]
+        }
+    ]
+}

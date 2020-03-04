@@ -45,6 +45,9 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
         default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/timecraft/retro");
         
+        Gtk.Settings.get_default().set_property("gtk-icon-theme-name", "elementary");
+        Gtk.Settings.get_default().set_property("gtk-theme-name", "elementary");
+
         systems = try_get_systems ();
                 
         main_window = new MainWindow (this);
