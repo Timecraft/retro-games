@@ -12,8 +12,8 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
     private int total_buttons = 21;
 
-    private double[] analog_left_pos = {0,0};
-    private double[] analog_right_pos = {0,0};
+    private double[] analog_x_pos = {0,0};
+    private double[] analog_y_pos = {0,0};
 
 	private const GamepadInputSource[] INPUT_SOURCES = {
 		{ { EventCode.EV_KEY, EventCode.BTN_B }, "a" },
@@ -172,9 +172,6 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
                 highlight ({ EventCode.EV_ABS, axis }, !(-0.01 < value < 0.01));
                 if (axis == 1) {
                     button_ids [18].amount = value;
-                    if (value == 0) {
-                        button_ids[18].amount = 0;
-                    }
                 }
                 else {
                     button_ids [20].amount = value;
@@ -245,27 +242,12 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
                 context.push_group ();
                 if (button_ids [i].button_id.contains ("analog")) {
                     if (button_ids [i].direction == Direction.X) {
-
-                        if (button_ids [i].button_id.contains ("left")) {
-                            analog_left_pos [0] = button_ids [i].amount * 25;
-                            translate_analog (context, Direction.X, analog_left_pos [0], analog_left_pos [1]);
-                        }
-                        else if (button_ids [i].button_id.contains ("right")) {
-                            analog_right_pos [0] = button_ids [i].amount * 25;
-                            translate_analog (context, Direction.X, analog_right_pos [0], analog_right_pos [1]);
-                        }
+                        translate_analog (context, Direction.X, button_ids [i].amount);
+                        
                     }
                     else if (button_ids [i].direction == Direction.Y) {
-                        if (button_ids [i].button_id.contains ("left")) {
-                            analog_left_pos [1] = button_ids [i].amount * 25;
-                            translate_analog (context, Direction.Y, analog_left_pos [0], analog_left_pos [1]);
-                        }
-                        else if (button_ids [i].button_id.contains ("right")) {
-                            analog_right_pos [1] = button_ids [i].amount * 25;
-                            translate_analog (context, Direction.X, analog_right_pos [0], analog_right_pos [1]);
-                        }
+                        translate_analog (context, Direction.Y, button_ids [i].amount);
                     }
-                    
                 }
         		handle.render_cairo_sub (context, button_ids[i].button_id);
         		var group = context.pop_group ();
@@ -284,9 +266,14 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         }
     }
 
-    private void translate_analog (Cairo.Context context, Direction direction, double x, double y) {
-        message ("%s,%s", x.to_string (), y.to_string ());
-        context.translate (x, y);
+    private void translate_analog (Cairo.Context context, Direction direction, double amount) {
+        message (amount.to_string ());
+        if (direction == Direction.Y) {
+            context.translate (0, 25 * amount);
+        }
+        if (direction == Direction.X) {
+            context.translate (25 * amount, 0);
+        }
 
     }
 
