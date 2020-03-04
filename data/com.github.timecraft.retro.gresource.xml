@@ -6,51 +6,6 @@
     
     <file alias="controller-outline.svg">icons/internal/controller-buttons/controller-outline.svg</file>
     
-    <!-- Controller buttons -->
-      <!-- DPad -->
-          <file alias="controller-button-dpad-down.svg">icons/internal/controller-buttons/controller-button-dpad-down.svg</file>
-          <file alias="controller-button-dpad-up.svg">icons/internal/controller-buttons/controller-button-dpad-up.svg</file>
-          <file alias="controller-button-dpad-left.svg">icons/internal/controller-buttons/controller-button-dpad-left.svg</file>
-          <file alias="controller-button-dpad-right.svg">icons/internal/controller-buttons/controller-button-dpad-right.svg</file>
-          
-      <!-- ABXY, base SNES controller -->
-        <!-- A -->
-          <file alias="controller-button-east.svg">icons/internal/controller-buttons/controller-button-east.svg</file>
-        <!-- B -->
-          <file alias="controller-button-south.svg">icons/internal/controller-buttons/controller-button-south.svg</file>
-        <!-- X -->
-          <file alias="controller-button-north.svg">icons/internal/controller-buttons/controller-button-north.svg</file>
-        <!-- Y -->
-          <file alias="controller-button-west.svg">icons/internal/controller-buttons/controller-button-west.svg</file>
-          
-      <!-- Bumpers -->
-          <file alias="controller-button-right-bumper.svg">icons/internal/controller-buttons/controller-button-right-bumper.svg</file>
-          <file alias="controller-button-left-bumper.svg">icons/internal/controller-buttons/controller-button-left-bumper.svg</file>
-          
-      <!-- Triggers -->
-          <file alias="controller-button-right-trigger.svg">icons/internal/controller-buttons/controller-button-right-trigger.svg</file>
-          <file alias="controller-button-left-trigger.svg">icons/internal/controller-buttons/controller-button-left-trigger.svg</file>
-          
-      <!-- Stick Buttons -->
-          <file alias="controller-button-right-stick.svg">icons/internal/controller-buttons/controller-button-right-stick.svg</file>
-          <file alias="controller-button-left-stick.svg">icons/internal/controller-buttons/controller-button-left-stick.svg</file>
-          
-      <!-- Middle buttons, base GameBoy Advance -->
-        <!-- Start -->
-          <file alias="controller-button-right-middle.svg">icons/internal/controller-buttons/controller-button-right-middle.svg</file>
-        <!-- Select -->
-          <file alias="controller-button-left-middle.svg">icons/internal/controller-buttons/controller-button-left-middle.svg</file>
-        <!-- Home, base Wii U Pro controller -->
-          <file alias="controller-button-middle.svg">icons/internal/controller-buttons/controller-button-middle.svg</file>
-      
-      <!-- Analog sticks -->
-        <!-- Left, horizontal -->
-          <file alias="controller-stick-left-horizontal.svg">icons/internal/controller-buttons/controller-stick-left-horizontal.svg</file>
-        <!-- Left, vertical -->
-          <file alias="controller-stick-left-vertical.svg">icons/internal/controller-buttons/controller-stick-left-vertical.svg</file>
-        <!-- Right, horizontal -->
-          <file alias="controller-stick-right-horizontal.svg">icons/internal/controller-buttons/controller-stick-right-horizontal.svg</file>
-        <!-- Right, vertical -->
-          <file alias="controller-stick-right-vertical.svg">icons/internal/controller-buttons/controller-stick-right-vertical.svg</file>
+    
   </gresource>
 </gresources>
