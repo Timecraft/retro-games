@@ -245,21 +245,21 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
                         if (button_ids [i].button_id.contains ("left")) {
                             analog_left_pos [0] = button_ids [i].amount * 25;
-                            translate_analog (context, Direction.X, button_ids [i].amount, analog_left_pos [0], analog_left_pos [1]);
+                            translate_analog (context, Direction.X, analog_left_pos [0], analog_left_pos [1]);
                         }
                         else if (button_ids [i].button_id.contains ("right")) {
                             analog_right_pos [0] = button_ids [i].amount * 25;
-                            translate_analog (context, Direction.X, button_ids [i].amount, analog_right_pos [0], analog_right_pos [1]);
+                            translate_analog (context, Direction.X, analog_right_pos [0], analog_right_pos [1]);
                         }
                     }
                     else if (button_ids [i].direction == Direction.Y) {
                         if (button_ids [i].button_id.contains ("left")) {
                             analog_left_pos [1] = button_ids [i].amount * 25;
-                            translate_analog (context, Direction.Y, button_ids [i].amount, analog_left_pos [0], analog_left_pos [1]);
+                            translate_analog (context, Direction.Y, analog_left_pos [0], analog_left_pos [1]);
                         }
                         else if (button_ids [i].button_id.contains ("right")) {
                             analog_right_pos [1] = button_ids [i].amount * 25;
-                            translate_analog (context, Direction.X, button_ids [i].amount, analog_right_pos [0], analog_right_pos [1]);
+                            translate_analog (context, Direction.X, analog_right_pos [0], analog_right_pos [1]);
                         }
                     }
                     
@@ -281,14 +281,9 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         }
     }
 
-    private void translate_analog (Cairo.Context context, Direction direction, double amount, double x, double y) {
-        message (amount.to_string ());
-        if (direction == Direction.Y) {
-            context.translate (x, 25 * amount);
-        }
-        if (direction == Direction.X) {
-            context.translate (25 * amount, y);
-        }
+    private void translate_analog (Cairo.Context context, Direction direction, double x, double y) {
+        
+        context.translate (x, y);
 
     }
 
