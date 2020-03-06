@@ -30,11 +30,6 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
     public int current_button = 0;
 
-    private int total_buttons = 21;
-
-    private int total_buttons_retro_joypad = 15;
-
-
     private const GamepadInput[] STANDARD_GAMEPAD_INPUTS = {
                                                     		{ EventCode.EV_KEY, EventCode.BTN_B },              // A
     		                                                { EventCode.EV_KEY, EventCode.BTN_A },              // B
@@ -428,7 +423,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
         // All buttons have been set
-        if (current_button >= total_buttons) {
+        if (current_button >= STANDARD_GAMEPAD_INPUTS.length) {
             all_buttons_set ();
             device.save_user_mapping (gamepad_mapper.build_sdl_string ());
             message (gamepad_mapper.build_sdl_string ());
@@ -448,7 +443,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             current_button ++;
             message ("Button Pressed");
             control_view.next_button ();
-            if (current_button >= total_buttons_retro_joypad) {
+            if (current_button >= controller_buttons.length) {
                 main_window.key_joypad_mapping = this.key_joypad_mapping;
                 all_buttons_set ();
 
