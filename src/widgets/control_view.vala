@@ -167,7 +167,7 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         double value;
 
         if (event.get_absolute (out axis, out value)) {
-            //message ("%s\t%s", axis.to_string (), value.to_string ());
+            message ("%s\t%s", axis.to_string (), value.to_string ());
             if (axis == 1 || axis == 4) { // Y axis
                 highlight ({ EventCode.EV_ABS, axis }, !(-0.01 < value < 0.01));
                 if (axis == 1) { // Left
