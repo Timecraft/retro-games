@@ -10,8 +10,6 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
     private int current_iter = -1;
 
-    private double[] analog_x_pos = {0,0};
-    private double[] analog_y_pos = {0,0};
 
 	private const GamepadInputSource[] INPUT_SOURCES = {
 		{ { EventCode.EV_KEY, EventCode.BTN_B }, "a" },
@@ -40,31 +38,6 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
 
 
-        private string[] standard_gamepad_inputs_as_string =   {
-                                                                "BTN_A",                                            // A
-                                                                "BTN_B",                                            // B
-                                                                "BTN_X",                                            // X
-                                                                "BTN_Y",                                            // Y
-                                                                "BTN_DPAD_UP",                                      // Dpad Up
-                                                                "BTN_DPAD_DOWN",                                    // Dpad Down
-                                                                "BTN_DPAD_LEFT",                                    // Dpad Left
-                                                                "BTN_DPAD_RIGHT",                                   // Dpad Right
-                                                                "BTN_TL",                                           // Left Bumper
-                                                                "BTN_TL2",                                          // Left Trigger
-                                                                "BTN_THUMBL",                                       // Left Stick
-                                                                "BTN_SELECT",                                       // Select
-                                                                "BTN_TR",                                           // Right Bumper
-                                                                "BTN_TR2",                                          // Right Trigger
-                                                                "BTN_THUMBR",                                       // Right Stick
-                                                                "BTN_START",                                         // Start
-                                                                "BTN_MODE",
-                                                                "ABS_X",
-                                                                "ABS_Y",
-                                                                "ABS_RX",
-                                                                "ABS_RY"
-                                                                };
-
-
     private Manette.Monitor monitor;
     private Manette.Device device;
     private Manette.MonitorIter monitor_iter;
@@ -78,39 +51,51 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
 
     public ControlView () {
+
         set_up_button_ids ();
+
         set_size_request (448, 448);
+
+        highlight ({ EventCode.EV_ABS, 0 }, false);
+        highlight ({ EventCode.EV_ABS, 1 }, false);
+        highlight ({ EventCode.EV_ABS, 2 }, false);
+        highlight ({ EventCode.EV_ABS, 3 }, false);
+
         monitor = new Manette.Monitor ();
         monitor_iter = monitor.iterate ();
         monitor_iter.next (out device);
         if (device != null) {
             connect_to_gamepad ();
         }
+
     }
 
     private void set_up_button_ids () {                                                         // Base GameCube controller
-        HighlightId button_east             =           {"#button_east"         ,       false, null, 0, 0}; // A
-        HighlightId button_south            =           {"#button_south"        ,       false, null, 0, 0}; // B
-        HighlightId button_north            =           {"#button_north"        ,       false, null, 0, 0}; // X
-        HighlightId button_west             =           {"#button_west"         ,       false, null, 0, 0}; // Y
-        HighlightId dpad_up                 =           {"#dpad_up"             ,       false, null, 0, 0}; // DPad Up
-        HighlightId dpad_down               =           {"#dpad_down"           ,       false, null, 0, 0}; // DPad Down
-        HighlightId dpad_left               =           {"#dpad_left"           ,       false, null, 0, 0}; // DPad Left
-        HighlightId dpad_right              =           {"#dpad_right"          ,       false, null, 0, 0}; // DPad Right
-        HighlightId left_bumper             =           {"#left_bumper"         ,       false, null, 0, 0}; // Left Bumper
-        HighlightId left_trigger            =           {"#left_trigger"        ,       false, null, 0, 0}; // Left Trigger
-        HighlightId left_stick              =           {"#left_stick"          ,       false, null, 0, 0}; // Left Stick
-        HighlightId button_middle_left      =           {"#button_middle_left"  ,       false, null, 0, 0}; // Select
-        HighlightId right_bumper            =           {"#right_bumper"        ,       false, null, 0, 0}; // Right Bumper
-        HighlightId right_trigger           =           {"#right_trigger"       ,       false, null, 0, 0}; // Right Trigger
-        HighlightId right_stick             =           {"#right_stick"         ,       false, null, 0, 0}; // Right Stick
-        HighlightId button_middle_right     =           {"#button_middle_right" ,       false, null, 0, 0}; // Start
-        HighlightId button_middle           =           {"#button_middle"       ,       false, null, 0, 0}; // Home
+        HighlightId button_east             =           {"#button_east"         ,       false, 0, 0}; // A
+        HighlightId button_south            =           {"#button_south"        ,       false, 0, 0}; // B
+        HighlightId button_north            =           {"#button_north"        ,       false, 0, 0}; // X
+        HighlightId button_west             =           {"#button_west"         ,       false, 0, 0}; // Y
+        HighlightId dpad_up                 =           {"#dpad_up"             ,       false, 0, 0}; // DPad Up
+        HighlightId dpad_down               =           {"#dpad_down"           ,       false, 0, 0}; // DPad Down
+        HighlightId dpad_left               =           {"#dpad_left"           ,       false, 0, 0}; // DPad Left
+        HighlightId dpad_right              =           {"#dpad_right"          ,       false, 0, 0}; // DPad Right
+        HighlightId left_bumper             =           {"#left_bumper"         ,       false, 0, 0}; // Left Bumper
+        HighlightId left_trigger            =           {"#left_trigger"        ,       false, 0, 0}; // Left Trigger
+        HighlightId left_stick              =           {"#left_stick"          ,       false, 0, 0}; // Left Stick
+        HighlightId button_middle_left      =           {"#button_middle_left"  ,       false, 0, 0}; // Select
+        HighlightId right_bumper            =           {"#right_bumper"        ,       false, 0, 0}; // Right Bumper
+        HighlightId right_trigger           =           {"#right_trigger"       ,       false, 0, 0}; // Right Trigger
+        HighlightId right_stick             =           {"#right_stick"         ,       false, 0, 0}; // Right Stick
+        HighlightId button_middle_right     =           {"#button_middle_right" ,       false, 0, 0}; // Start
+        HighlightId button_middle           =           {"#button_middle"       ,       false, 0, 0}; // Home
+        HighlightId stick_right_analog      =           {"#stick_right_analog"  ,       false, 0, 0};
+        HighlightId stick_left_analog       =           {"#stick_left_analog"   ,       false, 0, 0};
                                                                                                 // This makes no distinction between X and Y analog actions
-        HighlightId stick_left_analog_x     =             {"#stick_left_analog"   ,       false, Direction.X, 0, 0}; // Left Analog Stick
-        HighlightId stick_left_analog_y     =             {"#stick_left_analog"   ,       false, Direction.Y, 0, 0}; // Left Analog Stick
-        HighlightId stick_right_analog_x    =             {"#stick_right_analog"  ,       false, Direction.X, 0, 0}; // Right Analog Stick
-        HighlightId stick_right_analog_y    =             {"#stick_right_analog"  ,       false, Direction.Y, 0, 0}; // Right Analog Stick
+       // HighlightId stick_left_analog_x     =             {"#stick_left_analog"   ,       false, Direction.X, 0, 0}; // Left Analog Stick
+       // HighlightId stick_left_analog_y     =             {"#stick_left_analog"   ,       false, Direction.Y, 0, 0}; // Left Analog Stick
+       // HighlightId stick_right_analog_x    =             {"#stick_right_analog"  ,       false, Direction.X, 0, 0}; // Right Analog Stick
+       // HighlightId stick_right_analog_y    =             {"#stick_right_analog"  ,       false, Direction.Y, 0, 0}; // Right Analog Stick
+
 
         button_ids += button_east;          // A
         button_ids += button_south;         // B
@@ -129,10 +114,15 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         button_ids += right_stick;          // Right Stick
         button_ids += button_middle_right;  // Start
         button_ids += button_middle;        // Home
+        /*
         button_ids += stick_left_analog_x;    // Left Analog Stick
         button_ids += stick_left_analog_y;    // Left Analog Stick
         button_ids += stick_right_analog_x;   // Right Analog Stick
         button_ids += stick_right_analog_y;   // Right Analog Stick
+        */
+
+        button_ids += stick_right_analog;
+        button_ids += stick_left_analog;
     }
 
 
@@ -166,25 +156,20 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
         if (event.get_absolute (out axis, out value)) {
             message ("%s\t%s", axis.to_string (), value.to_string ());
-            if (axis == 1 || axis == 4) { // Y axis
-                highlight ({ EventCode.EV_ABS, axis }, !(-0.01 < value < 0.01));
-                if (axis == 1) { // Left
-                    button_ids [18].amount_y = value;
-                }
-                else { // Right
-                    button_ids [20].amount_y = value;
-                }
+            highlight ({ EventCode.EV_ABS, axis }, !(-0.01 < value < 0.01));
+            if (axis == 1) { // Left
+                button_ids [18].amount_y = value;
+            }
+            if (axis == 4) { // Right
+                button_ids [17].amount_y = value;
+            }
+            if (axis == 0) { // Left
+                button_ids [18].amount_x = value;
+            }
+            if (axis == 3) { // Right
+                button_ids [17].amount_x = value;
+            }
 
-            }
-            if (axis == 0 || axis == 3) { // X axis
-                highlight ({ EventCode.EV_ABS, axis }, !(-0.01 < value < 0.01));
-                if (axis == 0) { // Left
-                    button_ids [17].amount_x = value;
-                }
-                else { // Right
-                    button_ids [19].amount_x = value;
-                }
-            }
         }
     }
 
@@ -219,7 +204,7 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
             if (input == INPUT_SOURCES[i].input) {
                 button_ids [i].highlight = highlight;
                 queue_draw ();
-                
+
 
             }
         }
@@ -272,12 +257,15 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         }
         button_ids [current_iter].highlight = true;
         if (button_ids [current_iter].button_id.contains ("analog")) {
-            if (button_ids [current_iter].direction == Direction.X) {
-                button_ids [current_iter].amount_y = 0;
+            if (button_ids [current_iter].amount_x == 0 && button_ids [current_iter].amount_y == 0) {
                 button_ids [current_iter].amount_x = 1;
             }
-            else {
+            else if (button_ids [current_iter].amount_x == 1 && button_ids [current_iter].amount_y == 0) {
                 button_ids [current_iter].amount_y = 1;
+                button_ids [current_iter].amount_x = 0;
+            }
+            else {
+                button_ids [current_iter].amount_y = 0;
                 button_ids [current_iter].amount_x = 0;
             }
         }

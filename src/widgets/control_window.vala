@@ -137,7 +137,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         Object (
             title: "Set up controls"
         );
-
+        
         gamepad_mapper = new GamepadMappingBuilder ();
 
         this.main_window = main_window;
@@ -145,7 +145,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
         this.set_titlebar (new ControlHeaderBar (this));
 
-
+        
 
 
         key_joypad_mapping = new Retro.KeyJoypadMapping ();
@@ -176,6 +176,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
         window_grid.attach (device_name, 0, 0, 5, 3);
+        
         control_view = new ControlView ();
         window_grid.attach (control_view, 0, 2, 5, 3);
         window_grid.attach (control_setup, 2, 5, 1, 1);
@@ -183,16 +184,17 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
         monitor = new Manette.Monitor ();
         monitor_iter = monitor.iterate ();
-        message ("Boop");
+        
         monitor.device_connected.connect ( (device) => {
             refresh_controller (device);
             control_view.connect_to_gamepad ();
         });
-        message ("Beep");
+        
         bool worked = monitor_iter.next (out device);
         if (worked) {
-            message (device.get_name ());
             device_name.label = device.get_name ();
+            message (device.get_name ());
+            
         }
         else {
             message ("No device connected? Setting keyboard.");
@@ -201,6 +203,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
         // Ready to set up the controller
+        
         control_setup.clicked.connect ( () => {
             control_view.start_mapping_gamepad ();
             control_view.next_button ();
@@ -282,13 +285,14 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         add (window_grid);
 
         show_all ();
-
+        
     }
 
     // Destructor
+    /*
     ~ControlWindow () {
         // Save controls
-
+        
         if (key_joypad_mapping != null) {
             uint16 current_key;
             var xml_file = GLib.Path.build_filename (Application.instance.data_dir + "/controls.xml");
@@ -318,7 +322,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         current_button = 0;
 
     }
-
+    */
 
     public Retro.KeyJoypadMapping? get_key_joypad_mapping () {
         if (key_joypad_mapping == null) {
