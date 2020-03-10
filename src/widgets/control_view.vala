@@ -67,6 +67,7 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         if (device != null) {
             connect_to_gamepad ();
         }
+        
 
     }
 
@@ -125,13 +126,13 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         button_ids += stick_left_analog;
     }
 
-
+    
     public override bool draw (Cairo.Context context) {
         // Render SVG into DrawingArea
         highlight_button (context);
         return false;
     }
-
+    
 
 
     private void on_button_press_event (Manette.Event event) {
@@ -220,9 +221,10 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
             critical (e.message);
         }
 
-        for (int i = 0; i <= 20; ++i) {
+        for (int i = 0; i <= button_ids.length - 1; ++i) {
             if (button_ids[i].highlight) {
                 context.push_group ();
+                message (i.to_string ());
                 if (button_ids [i].button_id.contains ("analog")) {
                         translate_analog (context, button_ids [i].amount_x, button_ids [i].amount_y);
                 }

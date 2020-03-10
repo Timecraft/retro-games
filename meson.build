@@ -17,6 +17,8 @@ asresources = gnome.compile_resources (
 # Arguments
 add_global_arguments ('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name ()), language:'c')
 add_global_arguments ('-DRETRO_GTK_USE_UNSTABLE_API', language:'c')
+# Adds debugging symbols
+#add_global_arguments ('-g', language:'c')
 
 vapi_dir = meson.source_root () + 'vapis/event_codes.vapi'
 add_global_arguments ('--vapidir=' + meson.source_root () + '/vapis', language:'vala')
