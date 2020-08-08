@@ -90,7 +90,7 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         }
     }
 
-    private void set_up_button_ids () {                                                         // Base GameCube controller
+    private void set_up_button_ids () {                                                         // Base GameCube controller with modern buttons
         HighlightId button_east             =           {"#button_east"         ,       false, null, 0, 0}; // A
         HighlightId button_south            =           {"#button_south"        ,       false, null, 0, 0}; // B
         HighlightId button_north            =           {"#button_north"        ,       false, null, 0, 0}; // X
@@ -109,32 +109,32 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         HighlightId button_middle_right     =           {"#button_middle_right" ,       false, null, 0, 0}; // Start
         HighlightId button_middle           =           {"#button_middle"       ,       false, null, 0, 0}; // Home
                                                                                                 // This makes no distinction between X and Y analog actions
-        HighlightId stick_left_analog_x     =             {"#stick_left_analog"   ,       false, Direction.X, 0, 0}; // Left Analog Stick
-        HighlightId stick_left_analog_y     =             {"#stick_left_analog"   ,       false, Direction.Y, 0, 0}; // Left Analog Stick
-        HighlightId stick_right_analog_x    =             {"#stick_right_analog"  ,       false, Direction.X, 0, 0}; // Right Analog Stick
-        HighlightId stick_right_analog_y    =             {"#stick_right_analog"  ,       false, Direction.Y, 0, 0}; // Right Analog Stick
+        HighlightId stick_left_analog_x     =             {"#stick_left_analog"   ,       false, Direction.X, 0, 0}; // Left Analog Stick X
+        HighlightId stick_left_analog_y     =             {"#stick_left_analog"   ,       false, Direction.Y, 0, 0}; // Left Analog Stick Y
+        HighlightId stick_right_analog_x    =             {"#stick_right_analog"  ,       false, Direction.X, 0, 0}; // Right Analog Stick X
+        HighlightId stick_right_analog_y    =             {"#stick_right_analog"  ,       false, Direction.Y, 0, 0}; // Right Analog Stick Y
 
-        button_ids += button_east;          // A
-        button_ids += button_south;         // B
-        button_ids += button_north;         // X
-        button_ids += button_west;          // Y
-        button_ids += dpad_up;              // DPad Up
-        button_ids += dpad_down;            // DPad Down
-        button_ids += dpad_left;            // DPad Left
-        button_ids += dpad_right;           // DPad Right
-        button_ids += left_bumper;          // Left Bumper
-        button_ids += left_trigger;         // Left Trigger
-        button_ids += left_stick;           // Left Stick
-        button_ids += button_middle_left;   // Select
-        button_ids += right_bumper;         // Right Bumper
-        button_ids += right_trigger;        // Right Trigger
-        button_ids += right_stick;          // Right Stick
-        button_ids += button_middle_right;  // Start
-        button_ids += button_middle;        // Home
-        button_ids += stick_left_analog_x;    // Left Analog Stick
-        button_ids += stick_left_analog_y;    // Left Analog Stick
-        button_ids += stick_right_analog_x;   // Right Analog Stick
-        button_ids += stick_right_analog_y;   // Right Analog Stick
+/* 0 */ button_ids += button_east;          // A
+/* 1 */ button_ids += button_south;         // B
+/* 2 */ button_ids += button_north;         // X
+/* 3 */ button_ids += button_west;          // Y
+/* 4 */ button_ids += dpad_up;              // DPad Up
+/* 5 */ button_ids += dpad_down;            // DPad Down
+/* 6 */ button_ids += dpad_left;            // DPad Left
+/* 7 */ button_ids += dpad_right;           // DPad Right
+/* 8 */ button_ids += left_bumper;          // Left Bumper
+/* 9 */ button_ids += left_trigger;         // Left Trigger
+/* 10 */button_ids += left_stick;           // Left Stick
+/* 11 */button_ids += button_middle_left;   // Select
+/* 12 */button_ids += right_bumper;         // Right Bumper
+/* 13 */button_ids += right_trigger;        // Right Trigger
+/* 14 */button_ids += right_stick;          // Right Stick
+/* 15 */button_ids += button_middle_right;  // Start
+/* 16 */button_ids += button_middle;        // Home
+/* 17 */button_ids += stick_left_analog_x;    // Left Analog Stick
+/* 18 */button_ids += stick_left_analog_y;    // Left Analog Stick
+/* 19 */button_ids += stick_right_analog_x;   // Right Analog Stick
+/* 20 */button_ids += stick_right_analog_y;   // Right Analog Stick
     }
 
 
@@ -172,9 +172,11 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
                 highlight ({ EventCode.EV_ABS, axis }, !(-0.01 < value < 0.01));
                 if (axis == 1) { // Left
                     button_ids [18].amount_y = value;
+                    button_ids [17].amount_y = value;
                 }
                 else { // Right
                     button_ids [20].amount_y = value;
+                    button_ids [19].amount_y = value;
                 }
 
             }
@@ -182,9 +184,11 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
                 highlight ({ EventCode.EV_ABS, axis }, !(-0.01 < value < 0.01));
                 if (axis == 0) { // Left
                     button_ids [17].amount_x = value;
+                    button_ids [18].amount_x = value;
                 }
                 else { // Right
                     button_ids [19].amount_x = value;
+                    button_ids [20].amount_x = value;
                 }
             }
         }
@@ -242,10 +246,13 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
                 context.push_group ();
                 if (button_ids [i].button_id.contains ("analog")) {
                         translate_analog (context, button_ids [i].amount_x, button_ids [i].amount_y);
+                        context.translate (25 * button_ids [i].amount_x, 25 * button_ids [i].amount_y);
+                        
                 }
         		handle.render_cairo_sub (context, button_ids[i].button_id);
         		var group = context.pop_group ();
         		context.set_source_rgba (1, 0, 0, 1);
+
         		context.mask (group);
             }
             else {
@@ -255,6 +262,20 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         		Gdk.RGBA color;
                 get_style_context ().lookup_color ("theme_fg_color", out color);
                 context.set_source_rgba (color.red, color.green, color.blue, color.alpha);
+                // The stick is dealt with in two parts. It deals with the X and Y axis of each stick. So:
+                // If the stick has moved, make the other "axis" invisible
+                if (button_ids [i].button_id.contains ("analog") && 
+                    ((-0.01 < button_ids [i].amount_x < 0.01) || -0.01 < button_ids [i].amount_y < 0.01)) {
+                    context.set_source_rgba (0,0,0,0);
+                }
+                
+                // If the stick hasn't moved, color it white
+                if (button_ids [i].direction == Direction.X) {
+                    if (-0.01 < button_ids [i].amount_x < 0.01 && -0.01 < button_ids [i].amount_y < 0.01 &&         // X axis
+                        -0.01 < button_ids [i + 1].amount_x < 0.01 && -0.01 < button_ids [i + 1].amount_x < 0.01) { // Y axis
+                            context.set_source_rgba (color.red, color.green, color.blue, color.alpha);
+                        }
+                }
         		context.mask (group);
             }
         }
