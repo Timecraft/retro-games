@@ -1,3 +1,5 @@
+// This is the controller icon seen in the control window
+
 public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
 
     private Rsvg.Handle handle;

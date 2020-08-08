@@ -27,21 +27,23 @@ executable (
     
     
     # Widget files
-    join_paths ('widgets/main_window.vala'),
-    join_paths ('widgets/game_button.vala'),
-    join_paths ('widgets/system_grid.vala'),
-    join_paths ('widgets/system_button.vala'),
-    join_paths ('widgets/headerbar.vala'),
-    join_paths ('widgets/install_button.vala'),
-    join_paths ('widgets/game_grid.vala'),
-    join_paths ('widgets/install_core_button.vala'),
-    join_paths ('widgets/install_core_options.vala'),
-    join_paths ('widgets/back_button.vala'),
-    join_paths ('widgets/install_game_button.vala'),
-    join_paths ('widgets/control_button.vala'),
-    join_paths ('widgets/control_window.vala'),
-    join_paths ('widgets/control_headerbar.vala'),
-    join_paths ('widgets/control_view.vala'),
+    # Main Window
+    join_paths ('widgets/main_window/main_window.vala'),
+    join_paths ('widgets/main_window/game_button.vala'),
+    join_paths ('widgets/main_window/system_grid.vala'),
+    join_paths ('widgets/main_window/system_button.vala'),
+    join_paths ('widgets/main_window/headerbar.vala'),
+    join_paths ('widgets/main_window/install_button.vala'),
+    join_paths ('widgets/main_window/game_grid.vala'),
+    join_paths ('widgets/main_window/install_core_button.vala'),
+    join_paths ('widgets/main_window/install_core_options.vala'),
+    join_paths ('widgets/main_window/back_button.vala'),
+    join_paths ('widgets/main_window/install_game_button.vala'),
+    #Control Window
+    join_paths ('widgets/control_window/control_button.vala'),
+    join_paths ('widgets/control_window/control_window.vala'),
+    join_paths ('widgets/control_window/control_headerbar.vala'),
+    join_paths ('widgets/control_window/control_view.vala'),
     
     
     asresources,

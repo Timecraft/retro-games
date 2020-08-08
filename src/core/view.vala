@@ -11,17 +11,17 @@ public class Timecraft.RetroGame.View : GLib.Object {
         game_view = new Retro.CoreView ();
 
         game_view.set_core (core);
-
-        var key_joypad_mapping = main_window.key_joypad_mapping;
+        // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+        /*var key_joypad_mapping = main_window.key_joypad_mapping;
 
         
         if (key_joypad_mapping == null) {
             critical ("There is no KeyJoypadMapping set up!");
         }
-
+        
 
         game_view.set_key_joypad_mapping (key_joypad_mapping);
-
+        */
         game_view.set_as_default_controller (core);
 
         // This keyboard input is different from Retro.ControllerType.KEYBOARD, you mostly

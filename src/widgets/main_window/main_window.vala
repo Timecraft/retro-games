@@ -12,7 +12,8 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
 
     public RetroGame.Application retro_application {get; construct;}
 
-    public Retro.KeyJoypadMapping key_joypad_mapping = null;
+    // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+    //public Retro.KeyJoypadMapping key_joypad_mapping = null;
 
     public RetroGamepad gamepad;
 
@@ -60,7 +61,8 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         if (doc == null) {
             return;
         }
-        key_joypad_mapping = new Retro.KeyJoypadMapping ();
+        // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+        //key_joypad_mapping = new Retro.KeyJoypadMapping ();
         var root = doc->get_root_element ();
 
         for (Xml.Node* node = root->children; node != null; node = node->next) {
@@ -68,7 +70,8 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
             var gamepad_control = node->get_prop ("gamepad");
             
             if (!(retro_control == null && gamepad_control == null)) {
-                key_joypad_mapping.set_button_key (Retro.JoypadId.from_button_code ((uint16) uint64.parse (retro_control)), (uint16) uint64.parse (gamepad_control));
+                // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+                //key_joypad_mapping.set_button_key (Retro.JoypadId.from_button_code ((uint16) uint64.parse (retro_control)), (uint16) uint64.parse (gamepad_control));
             }
             // Libmanette automatically reloads the controls if the device is a controller.
         }

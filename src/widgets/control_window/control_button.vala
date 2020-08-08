@@ -1,3 +1,5 @@
+//This lives on the main window and is how you access the control window
+
 public class Timecraft.RetroGame.ControlButton : Gtk.Button {
     
     public ControlButton (MainWindow main_window) {

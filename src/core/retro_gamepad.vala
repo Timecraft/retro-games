@@ -37,7 +37,7 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
 		            return 0;
 		        }
     
-	            return get_button_pressed (id) ? int16.MAX : 0;
+	            return /*get_button_pressed (id) ? int16.MAX : 0;*/ 0;
             case Retro.ControllerType.ANALOG:
 	            Retro.AnalogId id;
 	            Retro.AnalogIndex index;
@@ -71,13 +71,15 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
                    
         return true;
     }
-
-    private bool get_button_pressed (Retro.JoypadId button) {
+    
+    // RetroGtk 0.14 Retro.JoypadId does not have `to_button_code`
+    /*private bool get_button_pressed (Retro.JoypadId button) {
         var button_code = button.to_button_code ();
 
         return button_code != EventCode.EV_MAX && buttons[button_code];
     }
-
+    */ 
+    
     private int16 get_analog_value (Retro.AnalogIndex index, Retro.AnalogId id) {
         switch (index) {
             case Retro.AnalogIndex.LEFT:

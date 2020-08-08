@@ -7,7 +7,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
     public Gtk.Image controller_image;
 
-    public Retro.KeyJoypadMapping key_joypad_mapping;
+    // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+    //public Retro.KeyJoypadMapping key_joypad_mapping;
 
 
     private Gtk.CssProvider css_provider;
@@ -147,8 +148,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
 
-
-        key_joypad_mapping = new Retro.KeyJoypadMapping ();
+        // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+        //key_joypad_mapping = new Retro.KeyJoypadMapping ();
 
 
 
@@ -253,8 +254,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
                 // Skip this button
                 handler_id_2 = key_press_event.connect ( (key_event) => {
                     
-                    
-                    set_button (key_event.hardware_keycode);
+                    // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+                    //set_button (key_event.hardware_keycode);
 
                     if (key_event.keyval == Gdk.Key.Escape) {
                         current_button++;
@@ -288,7 +289,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     // Destructor
     ~ControlWindow () {
         // Save controls
-
+        // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+        /*
         if (key_joypad_mapping != null) {
             uint16 current_key;
             var xml_file = GLib.Path.build_filename (Application.instance.data_dir + "/controls.xml");
@@ -315,11 +317,13 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             doc->save_format_file (xml_file, 1);
             delete doc;
         }
+        */
         current_button = 0;
 
     }
 
-
+    // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+    /*
     public Retro.KeyJoypadMapping? get_key_joypad_mapping () {
         if (key_joypad_mapping == null) {
             critical ("There is no KeyJoypadMapping");
@@ -329,6 +333,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             return key_joypad_mapping;
         }
     }
+    */
 
     // Controller has been connected
     private void refresh_controller (Manette.Device device) {
@@ -438,7 +443,10 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
     // Sets a button from a keyboard button press
+    // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+    /*
     private void set_button (uint16? key_val) {
+            
             key_joypad_mapping.set_button_key (controller_buttons [current_button], key_val);
             current_button ++;
             message ("Button Pressed");
@@ -451,8 +459,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
             }
             controller_image.icon_name = controller_button_icons [current_button];
         }
-
-
+        */
+        
     public void all_buttons_set () {
         if (device != null) {
             device.disconnect (handler_id);
