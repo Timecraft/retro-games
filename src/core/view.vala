@@ -63,7 +63,7 @@ public class Timecraft.RetroGame.View : GLib.Object {
         main_loop = new Retro.MainLoop (core);
         main_loop.start ();
 
-        main_window.headerbar.remove_back_button ();
+        
 
         main_window.show_all ();
 

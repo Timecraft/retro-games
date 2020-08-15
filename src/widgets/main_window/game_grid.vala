@@ -2,7 +2,7 @@ public class Timecraft.RetroGame.GameGrid : Gtk.EventBox {
 
     private int cells_width = 5;
 
-    private int current_cell_x = 0;
+    private int current_cell_x = -1;
     private int current_cell_y = 1;
     private float max_cell_x = 0;
 
@@ -162,6 +162,7 @@ public class Timecraft.RetroGame.GameGrid : Gtk.EventBox {
                 current_button.active = false;
                 current_button.icon = current_button.game.image;
             }
+            // Start game
             if (current_button == new_game && last_selected_button == new_game && 
                 last_selected_button.game.to_string () == Application.instance.selected_game.to_string ()) {
                 
@@ -173,6 +174,9 @@ public class Timecraft.RetroGame.GameGrid : Gtk.EventBox {
                 Application.instance.prepare_core ();
                 
                 
+                main_window.current_grid = "game";
+                
+                this.destroy ();
                 
                 //message (Application.instance.selected_game.to_string ());
             }

@@ -31,7 +31,8 @@ public class Timecraft.RetroGame.Headerbar : Gtk.HeaderBar {
     }
     
     public void remove_back_button () {
-        back_button.destroy ();
+        remove (back_button);
+        back_button = null;
     }
     
     public void hide_install_popover () {

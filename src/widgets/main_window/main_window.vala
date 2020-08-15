@@ -92,12 +92,50 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
     }
 
     public void go_back () {
-        remove (game_grid);
-        game_grid.destroy ();
+        message ("Going back");
+        message (@"current grid is: $(current_grid)");
+        if (current_grid == "game_grid") {
+            remove (game_grid);
+            game_grid = null;
 
-        system_grid = new SystemGrid (this);
-        add (system_grid);
-        current_grid = "system_grid";
+            system_grid = new SystemGrid (this);
+            add (system_grid);
+            current_grid = "system_grid";
+            headerbar.remove_back_button ();
+            message ("At system grid");
+        }
+        if (current_grid == "game") {
+            game_view_instance.main_loop.stop ();
+        
+            Gtk.Window alert = new Gtk.Window ();
+            Granite.Widgets.Welcome alert_view = new Granite.Widgets.Welcome ("Unsaved data will be lost!", "Do you want to continue?");
+            int cancel = alert_view.append ("process-stop", "Cancel", "Do not stop emulation.");
+            int cont = alert_view.append ("process-completed", "Continue", "Stop emulation and return to games screen.");
+            
+            alert_view.activated.connect ( (index) => {
+                if (index == cancel) {
+                    alert.close ();
+                    alert = null;
+                    game_view_instance.main_loop.start ();
+                    show_all ();
+                }
+                else if (index == cont) {
+                    remove (game_view_instance.game_view);
+                    game_view_instance = null;
+                    game_grid = new GameGrid (system, this);
+                    alert.close ();
+                    alert = null;
+                    add (game_grid);
+                    current_grid = "game_grid";
+                    show_all ();
+                    message ("At game grid");
+                }
+            });
+            
+            alert.add (alert_view);
+            alert.show_all ();
+        }
+        
         show_all ();
     }
 
