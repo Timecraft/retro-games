@@ -10,13 +10,17 @@ public class Timecraft.RetroGame.Game : GLib.Object {
     /// Path to URI
     public string uri;
     
+    public GriloMedia media;
+    
     public Game (string path, string display_name) {
-      this.path = path;
-      this.name = display_name;
-      
+        
+        this.path = path;
+        this.name = display_name;
+        
     }
         
     public Game.from_file (GLib.File file) {
+        message ("Creating game...");
         this.path = file.get_path ();
         this.name = file.get_path ().substring (file.get_path ().last_index_of ("/") + 1, -1);
         this.image = new Gtk.Image.from_icon_name ("application-x-executable", Gtk.IconSize.DIALOG);
@@ -28,6 +32,9 @@ public class Timecraft.RetroGame.Game : GLib.Object {
        
        // File URI
        this.uri = file.get_uri ();
+       
+       this.media = new GriloMedia (this.name, this);
+       media.try_resolve_media ();
     }
     
     // Convenience function to create a list of games from an array of GLib.Files
@@ -50,4 +57,6 @@ public class Timecraft.RetroGame.Game : GLib.Object {
     public System get_system () {
         return this.system;
     }
+    
+ 
 }

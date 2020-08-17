@@ -1,4 +1,3 @@
-
 public class Timecraft.RetroGame.Application : Gtk.Application {
     MainWindow main_window;
     
@@ -41,7 +40,9 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
     }
     
     protected override void activate () {
-        
+        string[] empty_args = {};
+        unowned string[] unowned_args = empty_args;
+        Grl.init (ref unowned_args);
         default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/timecraft/retro");
         
@@ -52,6 +53,7 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
                 
         main_window = new MainWindow (this);
         
+        Grl.deinit ();
     }
     
     

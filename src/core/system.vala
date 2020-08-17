@@ -23,6 +23,7 @@ public class Timecraft.RetroGame.System : GLib.Object {
     }
     // Constructs a System from a GLib.File
     public System.from_file (GLib.File file) {
+        message ("Creating system...");
         this.path = file.get_path () + "/";
         this.name = file.get_path ().substring (file.get_path ().last_index_of ("/") + 1, -1);
         this.system_path = file.get_path () + "/";

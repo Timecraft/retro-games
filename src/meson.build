@@ -24,6 +24,8 @@ executable (
     join_paths ('core/gamepad_mapping_builder.vala'),
     join_paths ('core/structs.vala'),
     join_paths ('core/enums.vala'),
+    join_paths ('core/grilo_media.vala'),
+    join_paths ('core/grilo_cover.vala'),
     
     
     # Widget files
@@ -58,6 +60,8 @@ executable (
         dependency ('manette-0.2'),
         dependency ('libxml-2.0'),
         dependency ('librsvg-2.0'),
+        dependency ('grilo-0.3'),
+        dependency ('libsoup-2.4'),
         cc.find_library('m'),
         valac.find_library ('event-codes', dirs: input_dir)
     ],
