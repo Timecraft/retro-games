@@ -279,36 +279,36 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
         this.destroy.connect ( () => {
             // Save controls
-        // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
-        /*
-        if (key_joypad_mapping != null) {
-            uint16 current_key;
-            var xml_file = GLib.Path.build_filename (Application.instance.data_dir + "/controls.xml");
-            Xml.Doc* doc = new Xml.Doc ("1.0");
-            Xml.Node* root_node = new Xml.Node (null, "controls");
-            doc->set_root_element (root_node);
-
-                // Controls are based on keyboard
-                if (device == null) {
-                    foreach (Retro.JoypadId current_id in controller_buttons) {
-
-                        Xml.Node* child = new Xml.Node (null, "control");
-
-                        current_key = key_joypad_mapping.get_button_key (current_id);
-                        child->new_prop ("retro", current_id.to_button_code ().to_string ());
-                        child->new_prop ("gamepad", current_key.to_string ());
-
-                        root_node->add_child (child);
+            // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+            /*
+            if (key_joypad_mapping != null) {
+                uint16 current_key;
+                var xml_file = GLib.Path.build_filename (Application.instance.data_dir + "/controls.xml");
+                Xml.Doc* doc = new Xml.Doc ("1.0");
+                Xml.Node* root_node = new Xml.Node (null, "controls");
+                doc->set_root_element (root_node);
+    
+                    // Controls are based on keyboard
+                    if (device == null) {
+                        foreach (Retro.JoypadId current_id in controller_buttons) {
+    
+                            Xml.Node* child = new Xml.Node (null, "control");
+    
+                            current_key = key_joypad_mapping.get_button_key (current_id);
+                            child->new_prop ("retro", current_id.to_button_code ().to_string ());
+                            child->new_prop ("gamepad", current_key.to_string ());
+    
+                            root_node->add_child (child);
+                        }
+    
                     }
-
-                }
-                // Controls are automatically saved if the device is a controller. Libmanette is awesome :D
-
-            doc->save_format_file (xml_file, 1);
-            delete doc;
-        }
-        */
-        current_button = 0;
+                    // Controls are automatically saved if the device is a controller. Libmanette is awesome :D
+    
+                doc->save_format_file (xml_file, 1);
+                delete doc;
+            }
+            */
+            current_button = 0;
         });
 
 
