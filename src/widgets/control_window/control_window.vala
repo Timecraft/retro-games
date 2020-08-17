@@ -188,6 +188,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         monitor.device_connected.connect ( (device) => {
             refresh_controller (device);
             control_view.connect_to_gamepad ();
+            Application.instance.add_controller (0, device);
         });
         message ("Beep");
         bool worked = monitor_iter.next (out device);
@@ -469,7 +470,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
         reset ();
         control_view.done_mapping ();
-
+        Application.instance.add_controller (0, device);
         return;
     }
 

@@ -163,7 +163,7 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         show_all ();
     }
 
-    public void load_game_view (Retro.Core core) {
+    public void load_game_view (Retro.Core core, RetroGamepad[] controllers) {
 
         if (gamepad == null) {
             var monitor = new Manette.Monitor ();
@@ -171,9 +171,28 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
             Manette.Device device;
             monitor_iter.next (out device);
             if (device != null) {
-                gamepad = new RetroGamepad (device);
+                //gamepad = new RetroGamepad (device);
+                Application.instance.add_controller (0, device);
+                message (@"Device name: $(device.get_name ())");
             }
         }
+        
+        
+        
+        for (uint i = 0; i < Application.instance.controllers.length; i++) {
+            if (Application.instance.controllers [i] != null) {
+                message ("Hello");
+                
+                core.set_controller (i + 1, Application.instance.controllers[i]);
+                message (@"Port number: $(i + 1)");
+            }
+        }
+        var iterator = core.iterate_controllers ();
+        Retro.Controller this_controller;
+        uint port;
+        iterator.next (out port, out this_controller);
+        
+        message (@"Port: $(port), Controller Exists: $((this_controller) != null)");
 
         remove (game_grid);
         game_grid.destroy ();

@@ -21,7 +21,7 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
     
     private GLib.File[] console_dirs;
     
-    
+    public RetroGamepad[] controllers = {null, null, null, null};
     /*
         Emulator variables. Includes:
         Core
@@ -104,12 +104,17 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
         emulator_core = new Retro.Core (this.selected_core.path);
         emulator_core.set_medias ({selected_game.uri});
         
+        //emulator_core.set_controller (0, )
         
         
-        main_window.load_game_view (emulator_core);
+        
+        main_window.load_game_view (emulator_core, controllers);
     }
     
-    
+    public void add_controller (uint port, Manette.Device controller) {
+        controllers [port] = new RetroGamepad (controller);
+        message ("Controller added");
+    }
     
     public static int main (string[] args) {
         
