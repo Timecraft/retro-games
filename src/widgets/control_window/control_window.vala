@@ -277,18 +277,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
 
 
-
-
-
-        add (window_grid);
-
-        show_all ();
-
-    }
-
-    // Destructor
-    ~ControlWindow () {
-        // Save controls
+        this.destroy.connect ( () => {
+            // Save controls
         // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
         /*
         if (key_joypad_mapping != null) {
@@ -319,8 +309,15 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         }
         */
         current_button = 0;
+        });
+
+
+        add (window_grid);
+
+        show_all ();
 
     }
+
 
     // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
     /*
