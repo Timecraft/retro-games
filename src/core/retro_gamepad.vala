@@ -10,7 +10,7 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
     private int16[] axes;
     private uint16 rumble_effect[2];
     
-    public signal void button_pressed (); 
+    //public signal void button_pressed (); 
 
     public RetroGamepad (Manette.Device device) {
         Object (device: device);
@@ -21,12 +21,13 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
         axes = new int16[EventCode.ABS_MAX + 1];
 
         device.button_press_event.connect (on_button_press_event);
-        device.button_press_event.connect ( () => {
-            button_pressed ();
-        });
         device.button_release_event.connect (on_button_release_event);
         device.absolute_axis_event.connect (on_absolute_axis_event);
         device.hat_axis_event.connect (on_hat_axis_event);
+    }
+
+    public void poll () {
+        
     }
 
     public int16 get_input_state (Retro.Input input) {
@@ -37,7 +38,7 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
 		            return 0;
 		        }
     
-	            return /*get_button_pressed (id) ? int16.MAX : 0;*/ 0;
+	            return get_button_pressed (id) ? int16.MAX : 0;
             case Retro.ControllerType.ANALOG:
 	            Retro.AnalogId id;
 	            Retro.AnalogIndex index;
@@ -80,6 +81,39 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
     }
     */ 
     
+    /* Custom made version of Retro.JoypadId.to_button_code (); */
+    
+    private static uint16[] RETRO_JOYPAD_ID_EVENT_CODE_MAPPING = {
+        EventCode.BTN_A,
+        EventCode.BTN_Y,
+        EventCode.BTN_SELECT,
+        EventCode.BTN_START,
+        EventCode.BTN_DPAD_UP,
+        EventCode.BTN_DPAD_DOWN,
+        EventCode.BTN_DPAD_LEFT,
+        EventCode.BTN_DPAD_RIGHT,
+        EventCode.BTN_B,
+        EventCode.BTN_X,
+        EventCode.BTN_TL,
+        EventCode.BTN_TR,
+        EventCode.BTN_TL2,
+        EventCode.BTN_TR2,
+        EventCode.BTN_THUMBL,
+        EventCode.BTN_THUMBR,
+    };
+    
+    private uint16 get_button_code (Retro.JoypadId button) {
+        GLib.return_val_if_fail (button >= 0, EventCode.EV_MAX);
+        GLib.return_val_if_fail (button < Retro.JoypadId.COUNT, EventCode.EV_MAX);
+        return RETRO_JOYPAD_ID_EVENT_CODE_MAPPING [button];
+    }
+    
+    private bool get_button_pressed (Retro.JoypadId button) {
+        var button_code = get_button_code (button);
+        
+        return button_code != EventCode.EV_MAX && buttons[button_code];
+    }
+    
     private int16 get_analog_value (Retro.AnalogIndex index, Retro.AnalogId id) {
         switch (index) {
             case Retro.AnalogIndex.LEFT:
@@ -107,10 +141,11 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
 
     private void on_button_press_event (Manette.Event event) {
         uint16 button;
-
+        //button_pressed ();
         if (event.get_button (out button)) {
 	        buttons[button] = true;
         }   
+        
     }
 
     private void on_button_release_event (Manette.Event event) {
@@ -140,8 +175,8 @@ public class Timecraft.RetroGame.RetroGamepad : GLib.Object, Retro.Controller {
         }
     }
     
-    private void poll () {
-        
+    public string to_string () {
+        return this.device.get_name ();
     }
 }
 

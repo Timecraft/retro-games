@@ -37,11 +37,40 @@ public class Timecraft.RetroGame.View : GLib.Object {
         var core_view_joypad = game_view.as_controller (Retro.ControllerType.JOYPAD);
 
         int port = 0;
-        if (main_window.gamepad != null)
+        
+        
+        
+        for (;port < Application.instance.controllers.length; port++) {
+            if (Application.instance.controllers [port] != null) {
+                //message ("Hello");
+                message (@"Port number: $port, Controller Name: $(Application.instance.controllers [port])");
+                core.set_controller (port, Application.instance.controllers [port]);
+                
+            }
+            
+            else {
+                break;
+            }
+        }
+        
+        /*
+        if (main_window.gamepad != null) {
+            message (@"Port number: $port, Controller Name: $(main_window.gamepad)");
             core.set_controller (port++, main_window.gamepad);
-
+            
+            }
+        */
+        message (@"Port number: $port, Controller Name: Keyboard");
         core.set_controller (port++, core_view_joypad);
-
+        
+        var iterator = core.iterate_controllers ();
+        Retro.Controller this_controller;
+        uint port_num;
+        message ("");
+        message ("");
+        
+       
+        
         // You have to have save dir and system dir set to something.
         // Save directory is where the core saves (not all cores use saveram, a lot
         // just write a file into save directory), so you gotta have it

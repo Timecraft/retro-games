@@ -43,7 +43,7 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
 
         add (system_grid);
 
-        try_load_controls ();
+        //try_load_controls ();
 
         show_all ();
     }
@@ -169,30 +169,25 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
             var monitor = new Manette.Monitor ();
             var monitor_iter = monitor.iterate ();
             Manette.Device device;
-            monitor_iter.next (out device);
-            if (device != null) {
-                //gamepad = new RetroGamepad (device);
-                Application.instance.add_controller (0, device);
-                message (@"Device name: $(device.get_name ())");
-            }
-        }
-        
-        
-        
-        for (uint i = 0; i < Application.instance.controllers.length; i++) {
-            if (Application.instance.controllers [i] != null) {
-                message ("Hello");
+            string last_device_name = "";
+            for (int i = 0; i < 4; i++) {
+                monitor_iter.next (out device);
                 
-                core.set_controller (i + 1, Application.instance.controllers[i]);
-                message (@"Port number: $(i + 1)");
+                if (device != null && last_device_name != device.get_name ()) {
+                    //gamepad = new RetroGamepad (device);
+                    Application.instance.add_controller (i, device);
+                    message (@"Device name: $(device.get_name ())");
+                }
+                last_device_name = device.get_name ();
             }
         }
-        var iterator = core.iterate_controllers ();
-        Retro.Controller this_controller;
-        uint port;
-        iterator.next (out port, out this_controller);
         
-        message (@"Port: $(port), Controller Exists: $((this_controller) != null)");
+        //this.gamepad = Application.instance.controllers [0];
+        
+        
+        
+        
+        
 
         remove (game_grid);
         game_grid.destroy ();

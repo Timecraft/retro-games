@@ -113,7 +113,7 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
     
     public void add_controller (uint port, Manette.Device controller) {
         controllers [port] = new RetroGamepad (controller);
-        message ("Controller added");
+        message (@"Controller added on port $(port)");
     }
     
     public static int main (string[] args) {
