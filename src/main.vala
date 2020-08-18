@@ -42,6 +42,14 @@ public class Timecraft.RetroGame.Application : Gtk.Application {
     protected override void activate () {
         string[] empty_args = {};
         unowned string[] unowned_args = empty_args;
+        
+        /* RetroGtk does not have a way to ask for it's version.
+         * Due to this, I am going to hardcode the version in the app
+         * so that I can have a fighting chance at debugging other user's
+         * issues, like Dolphin (GameCube/Wii) emu crashing on boot attempt.
+        */
+        message ("Hardcoded RetroGtk version: 0.14");
+        
         Grl.init (ref unowned_args);
         default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/timecraft/retro");
