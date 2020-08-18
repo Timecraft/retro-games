@@ -46,6 +46,7 @@ executable (
     join_paths ('widgets/control_window/control_window.vala'),
     join_paths ('widgets/control_window/control_headerbar.vala'),
     join_paths ('widgets/control_window/control_view.vala'),
+    join_paths ('widgets/control_window/control_port_buttons.vala'),
     
     
     asresources,

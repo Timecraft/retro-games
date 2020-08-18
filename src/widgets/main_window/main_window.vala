@@ -42,6 +42,23 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
         current_grid = "system_grid";
 
         add (system_grid);
+        
+        
+        
+        var monitor = new Manette.Monitor ();
+            var monitor_iter = monitor.iterate ();
+            Manette.Device device;
+            string last_device_name = "";
+            for (int i = 0; i < 4; i++) {
+                monitor_iter.next (out device);
+                
+                if (device != null && last_device_name != device.get_name ()) {
+                    //gamepad = new RetroGamepad (device);
+                    Application.instance.add_controller (i, device);
+                    message (@"Device name: $(device.get_name ())");
+                }
+                last_device_name = device.get_name ();
+            }
 
         //try_load_controls ();
 
@@ -164,24 +181,6 @@ public class Timecraft.RetroGame.MainWindow : Gtk.Window {
     }
 
     public void load_game_view (Retro.Core core, RetroGamepad[] controllers) {
-
-        if (gamepad == null) {
-            var monitor = new Manette.Monitor ();
-            var monitor_iter = monitor.iterate ();
-            Manette.Device device;
-            string last_device_name = "";
-            for (int i = 0; i < 4; i++) {
-                monitor_iter.next (out device);
-                
-                if (device != null && last_device_name != device.get_name ()) {
-                    //gamepad = new RetroGamepad (device);
-                    Application.instance.add_controller (i, device);
-                    message (@"Device name: $(device.get_name ())");
-                }
-                last_device_name = device.get_name ();
-            }
-        }
-        
         //this.gamepad = Application.instance.controllers [0];
         
         

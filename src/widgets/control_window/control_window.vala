@@ -17,19 +17,24 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
     private Gtk.Button control_setup;
 
-    private Gtk.Label device_name;
+    private Gtk.ComboBox controllers_box;
+    private Gtk.ListStore available_controllers;
+    private Gtk.TreeIter available_controllers_iter;
+    
+    private Manette.Device[] controllers = {};
+    
 
     private Gtk.Button skip_button;
 
     private MainWindow main_window;
 
     private ControlView control_view;
+    
+    private ControlPortButtons control_port_buttons;
 
 
     private GamepadMappingBuilder gamepad_mapper;
 
-
-    public int current_button = 0;
 
     private const GamepadInput[] STANDARD_GAMEPAD_INPUTS = {
                                                     		{ EventCode.EV_KEY, EventCode.BTN_B },              // A
@@ -133,6 +138,15 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     private ulong handler_id; // For disconnecting from signals
     private ulong handler_id_2;
     private ulong handler_id_3;
+    
+    private bool controllers_connected = false;
+    private bool worked = false;
+    
+    public int current_button = 0;
+    
+    private int selected_controller = -1;
+    
+    private int selected_port = 0;
 
     public ControlWindow (MainWindow main_window) {
         Object (
@@ -173,109 +187,71 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         skip_button.set_tooltip_text ("Esc");
         skip_button.hide ();
 
-        device_name = new Gtk.Label ("");
 
 
 
-        window_grid.attach (device_name, 0, 0, 5, 3);
+        
+
+
+        
+        
+        // Set up controller selector
+        
+        refresh_controller ();
+        
+        controllers_box = new Gtk.ComboBox.with_model (available_controllers);
+        
+        var renderer = new Gtk.CellRendererText ();
+        controllers_box.pack_start (renderer, true);
+        controllers_box.add_attribute (renderer, "text", 0);
+        
+        
+        controllers_box.margin = 12;
+        controllers_box.halign = Gtk.Align.CENTER;
+        controllers_box.valign = Gtk.Align.CENTER;
+        controllers_box.hexpand = true;
+        controllers_box.width_request = 200;
+        controllers_box.get_child ().halign = Gtk.Align.CENTER;
+        
+        
+        
+        control_port_buttons = new ControlPortButtons ();
+        
+        control_port_buttons.port_changed.connect (on_control_port_buttons_port_changed);
+        
+        window_grid.attach (controllers_box, 0, 0, 5, 3);
+        
+        control_port_buttons.margin = 12;
+        control_port_buttons.halign = Gtk.Align.CENTER;
+        control_port_buttons.valign = Gtk.Align.CENTER;
+        control_port_buttons.hexpand = true;
+        control_port_buttons.width_request = 200;
+        
+        
+        window_grid.attach (control_port_buttons, 0, 1, 5, 3);
+        
         control_view = new ControlView ();
-        window_grid.attach (control_view, 0, 2, 5, 3);
-        window_grid.attach (control_setup, 2, 5, 1, 1);
-
-
-        monitor = new Manette.Monitor ();
-        monitor_iter = monitor.iterate ();
-        message ("Boop");
-        monitor.device_connected.connect ( (device) => {
-            refresh_controller (device);
-            control_view.connect_to_gamepad ();
-            //Application.instance.add_controller (0, device);
+        
+        
+        
+        window_grid.attach (control_view, 0, 3, 5, 3);
+        window_grid.attach (control_setup, 2, 6, 1, 1);
+        
+        controllers_box.changed.connect ( () => {
+            selected_controller = controllers_box.get_active ();
+            
+            message (@"Selected Device Name: $(controllers [selected_controller].get_name ())");
+            
+            this.device = controllers [selected_controller];
+            
+            control_view.connect_to_gamepad (this.device);
         });
-        message ("Beep");
-        bool worked = monitor_iter.next (out device);
-        if (worked) {
-            message (device.get_name ());
-            device_name.label = device.get_name ();
-        }
-        else {
-            message ("No device connected? Setting keyboard.");
-            device_name.label = "Keyboard";
-        }
+        
+        controllers_box.set_active (0);
 
 
         // Ready to set up the controller
-        control_setup.clicked.connect ( () => {
-            control_view.start_mapping_gamepad ();
-            control_view.next_button ();
-            window_grid.remove (control_setup);
-            window_grid.attach (skip_button, 2, 5, 1, 1);
-            skip_button.show ();
-
-
-
-            controller_image.icon_name = controller_button_icons [0];
-
-            // Check to see if there is a controller connected
-
-            if (worked) {
-
-
-                // Set current_button to event
-                handler_id = device.event.connect ( (device_event) => {
-                    set_button_from_controller_event (device_event);
-                });
-
-
-                // Skip this button
-                handler_id_2 = key_press_event.connect ( (key_event) => {
-                    // Add label to expose this capability
-
-                    if (key_event.keyval == Gdk.Key.Escape) {
-                        current_button++;
-                        control_view.next_button ();
-
-                    }
-                    return false;
-                });
-
-
-
-
-                handler_id_3 = skip_button.clicked.connect ( () => {
-                    current_button ++;
-                    controller_image.icon_name = controller_button_icons [current_button];
-                });
-            }
-            // There is no controller connected
-            else {
-                message ("No device connected? Setting keyboard.");
-                device_name.label = "Keyboard";
-
-                
-
-                // Skip this button
-                handler_id_2 = key_press_event.connect ( (key_event) => {
-                    
-                    // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
-                    //set_button (key_event.hardware_keycode);
-
-                    if (key_event.keyval == Gdk.Key.Escape) {
-                        current_button++;
-                        control_view.next_button ();
-
-
-                    }
-                    return false;
-                });
-
-
-
-
-                handler_id_3 = skip_button.clicked.connect ( () => {
-                    control_view.next_button ();
-                });
-            }
-        });
+        control_setup.clicked.connect (on_control_setup_clicked);
 
 
 
@@ -334,10 +310,41 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     }
     */
 
-    // Controller has been connected
-    private void refresh_controller (Manette.Device device) {
-        message (device.get_name ());
-        device_name.label = device.get_name ();
+    // Update controllers listed in `available_controllers`
+    private void refresh_controller () {
+        
+        monitor = new Manette.Monitor ();
+        monitor_iter = monitor.iterate ();
+        monitor.device_connected.connect ( () => {
+            refresh_controller ();
+        });
+        Manette.Device device;
+        available_controllers = new Gtk.ListStore (2,typeof (string), typeof (Manette.Device));
+        string last_device_name = "";
+        do {
+            worked = monitor_iter.next (out device);
+            if (last_device_name == device.get_name ()) {
+                break;
+            }
+            
+           available_controllers.append (out available_controllers_iter);
+           available_controllers.@set (available_controllers_iter, 0, device.get_name (), 1, device, -1);
+            controllers += device;
+            last_device_name = device.get_name ();
+            
+        } while (worked);
+        
+        var renderer = new Gtk.CellRendererText ();
+        
+        
+        // FIXME: Append keyboard to this list/Allow for keyboards to be used even if controllers are connected
+        if (controllers_box != null) {
+            controllers_box.set_model (available_controllers);
+            controllers_box.pack_start (renderer, true);
+            controllers_box.add_attribute (renderer, "text", 0);
+            controllers_box.set_active (0);
+            show_all ();
+        }
     }
 
 
@@ -485,5 +492,86 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
     }
 
 
+    private void on_control_setup_clicked () {
+        
+            control_view.start_mapping_gamepad ();
+            control_view.next_button ();
+            window_grid.remove (control_setup);
+            window_grid.attach (skip_button, 2, 5, 1, 1);
+            skip_button.show ();
+
+
+
+            controller_image.icon_name = controller_button_icons [0];
+
+            // Check to see if there is a controller connected
+
+            //if (worked) {
+
+
+                // Set current_button to event
+                handler_id = device.event.connect ( (device_event) => {
+                    set_button_from_controller_event (device_event);
+                });
+
+
+                // Skip this button
+                handler_id_2 = key_press_event.connect ( (key_event) => {
+                    // Add label to expose this capability
+
+                    if (key_event.keyval == Gdk.Key.Escape) {
+                        current_button++;
+                        control_view.next_button ();
+
+                    }
+                    return false;
+                });
+
+
+
+
+                handler_id_3 = skip_button.clicked.connect ( () => {
+                    current_button ++;
+                    controller_image.icon_name = controller_button_icons [current_button];
+                });
+            //}
+            // There is no controller connected
+            /*
+            else {
+                message ("No device connected? Setting keyboard.");
+                device_name.label = "Keyboard";
+
+                
+
+                // Skip this button
+                handler_id_2 = key_press_event.connect ( (key_event) => {
+                    
+                    // RetroGtk 0.14 does not have `Retro.KeyJoypadMapping`
+                    //set_button (key_event.hardware_keycode);
+
+                    if (key_event.keyval == Gdk.Key.Escape) {
+                        current_button++;
+                        control_view.next_button ();
+
+
+                    }
+                    return false;
+                });
+
+
+
+
+                handler_id_3 = skip_button.clicked.connect ( () => {
+                    control_view.next_button ();
+                });
+            }
+            */
+    }
+    
+
+    private void on_control_port_buttons_port_changed (int port_num) {
+        Application.instance.add_controller (port_num, device);
+        message (@"Port activated: $port_num");
+    }
 
 }

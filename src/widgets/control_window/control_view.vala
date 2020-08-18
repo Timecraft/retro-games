@@ -82,12 +82,6 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
     public ControlView () {
         set_up_button_ids ();
         set_size_request (448, 448);
-        monitor = new Manette.Monitor ();
-        monitor_iter = monitor.iterate ();
-        monitor_iter.next (out device);
-        if (device != null) {
-            connect_to_gamepad ();
-        }
     }
 
     private void set_up_button_ids () {                                                         // Base GameCube controller with modern buttons
@@ -198,7 +192,10 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
         disconnect_from_gamepad ();
     }
 
-    public void connect_to_gamepad () {
+    public void connect_to_gamepad (Manette.Device device) {
+        disconnect_from_gamepad ();
+        
+        this.device = device;
         gamepad_button_press_event_handler_id = device.button_press_event.connect (on_button_press_event);
         gamepad_button_release_event_handler_id = device.button_release_event.connect (on_button_release_event);
         gamepad_axis_event_handler_id = device.absolute_axis_event.connect (on_absolute_axis_event);
@@ -316,7 +313,7 @@ public class Timecraft.RetroGame.ControlView : Gtk.DrawingArea {
     }
 
     public void done_mapping () {
-        connect_to_gamepad ();
+        //connect_to_gamepad ();
         current_iter = -1;
     }
 
