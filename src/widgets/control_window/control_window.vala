@@ -169,7 +169,8 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
 
         control_setup.margin = 20;
 
-        skip_button = new Gtk.Button.with_label ("Hit \"Escape\" to skip this button.");
+        skip_button = new Gtk.Button.with_label ("Skip button");
+        skip_button.set_tooltip_text ("Esc");
         skip_button.hide ();
 
         device_name = new Gtk.Label ("");
@@ -188,7 +189,7 @@ public class Timecraft.RetroGame.ControlWindow : Gtk.Window {
         monitor.device_connected.connect ( (device) => {
             refresh_controller (device);
             control_view.connect_to_gamepad ();
-            Application.instance.add_controller (0, device);
+            //Application.instance.add_controller (0, device);
         });
         message ("Beep");
         bool worked = monitor_iter.next (out device);
